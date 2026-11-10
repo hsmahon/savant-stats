@@ -1,0 +1,666 @@
+checked_on: '2026-11-09'
+source_page: https://www.mlb.com/gameday/716463/final
+bundle_source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+bundle_sha256: f4f149833bbb4fc58730a0db366ae77e369d7150460ef0bb62d081601ef15fe6
+scope: All literal pathTemplate values in the referenced Gameday production bundle, deduplicated by host and exact template;
+  QA-only variants excluded. Not all programmatically constructed URLs or backend routes.
+literal_occurrences: 42
+routes:
+- host: https://statsapi.mlb.com
+  path_template: api/v1.1/game/{gid}/feed/live{differ}?language={site}{timecode}{pushUpdateId}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gid
+  - differ
+  - site
+  - timecode
+  - pushUpdateId
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 170006
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/game/{gid}/content?language={site}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gid
+  - site
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 170427
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/schedule?gamePk={gid}&language={site}&hydrate=story,xrefId,lineups,broadcasts(all),probablePitcher(note),game(tickets)&useLatestGames=true&fields=dates,games,teams,probablePitcher,note,id,dates,games,broadcasts,type,name,homeAway,isNational,dates,games,game,tickets,ticketType,ticketLinks,dates,games,lineups,homePlayers,awayPlayers,useName,lastName,primaryPosition,abbreviation,dates,games,xrefIds,xrefId,xrefType,story
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gid
+  - site
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 170613
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/people?personIds={playerId}&season={yyyy}&hydrate=stats(group=hitting,type=season,season={yyyy},gameType={game_type:R})
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - playerId
+  - yyyy
+  - game_type:R
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 171200
+  - 171441
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/people?personIds={playerId}&season={yyyy}&hydrate=stats(group=pitching,type=season,season={yyyy},gameType={game_type:P})
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - playerId
+  - yyyy
+  - game_type:P
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 171694
+  - 171947
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/people?personIds={playerId}&season={yyyy}&hydrate=stats(group=hitting,type=season,season={yyyy},gameType={game_type:P})
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - playerId
+  - yyyy
+  - game_type:P
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 172199
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://dapi.cms.mlbinfra.com/v2/content
+  path_template: '{site}-us/stories?tags.slug=gamepk-{gid}&$limit={limit:10}&$sort=contentDate:{sort:desc}'
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - site
+  - gid
+  - limit:10
+  - sort:desc
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 172435
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://dapi.cms.mlbinfra.com/v2/content/en-us/stories?tags.slug=gamepk-716463&$limit=1&$sort=contentDate:desc
+    http_status: 200
+    content_type: application/json; charset=utf-8
+    response_bytes: 4232
+    final_url: https://dapi.cms.mlbinfra.com/v2/content/en-us/stories?tags.slug=gamepk-716463&$limit=1&$sort=contentDate:desc
+    json_shape:
+    - pagination
+    - meta
+    - items
+    status: data_response
+- host: https://gd.mlb.com
+  path_template: components/game/{sportcode}/year_{yyyy}/month_{mm}/day_{dd}/gid_{gid}/media/mobile{underLang}.xml
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - sportcode
+  - yyyy
+  - mm
+  - dd
+  - gid
+  - underLang
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 172942
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/contentful/dictionary/mlb-gameday/{site}-JP
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - site
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 173369
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/contentful/dictionary/mlb-gameday/en-JP
+    http_status: 200
+    content_type: application/json
+    response_bytes: 23457
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/contentful/dictionary/mlb-gameday/en-JP
+    json_shape:
+    - dictionary
+    status: data_response
+- host: wss://ws.statsapi.mlb.com
+  path_template: api/v1/game/push/subscribe/gameday/{gid}
+  method: WebSocket
+  method_basis: WebSocket subscription configuration
+  parameters:
+  - gid
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 173800
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: wss://ws.statsapi.mlb.com
+  path_template: api/v1/game/push/subscribe/{gid}
+  method: WebSocket
+  method_basis: WebSocket subscription configuration
+  parameters:
+  - gid
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 173900
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://scout-insights-api.mlbinfra.com
+  path_template: api/v1/insights/{gamePk}/{timecode}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - timecode
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 203776
+  access: Bearer token explicitly configured in client
+  verification:
+    checked_on: '2026-11-09'
+    url: https://scout-insights-api.mlbinfra.com/api/v1/insights/716463/20230923_231745
+    http_status: 401
+    content_type: application/json
+    response_bytes: 67
+    final_url: https://scout-insights-api.mlbinfra.com/api/v1/insights/716463/20230923_231745
+    json_shape:
+    - message
+    - details
+    status: http_error
+- host: https://statsapi.mlb.com
+  path_template: api/v1/schedule
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters: []
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 2567631
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/transform-mlb-postseason-mini-scoreboard
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters: []
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 2588950
+  - 2589307
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1.1/game/{gamePk}/feed/live{differ}?language={language}{timecode}{pushUpdate}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - differ
+  - language
+  - timecode
+  - pushUpdate
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3479510
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/gameday/{locale:en-US}?gamePk={gamePk}&config=true&appContext={appContext}&stitch_env={stitchEnv}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - locale:en-US
+  - gamePk
+  - appContext
+  - stitchEnv
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3485032
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/gameday/en-US?gamePk=716463&config=true&appContext=mlb&stitch_env=prod
+    http_status: 200
+    content_type: application/json
+    response_bytes: 35950
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/gameday/en-US?gamePk=716463&config=true&appContext=mlb&stitch_env=prod
+    json_shape:
+    - teamId
+    - name
+    - teamNameDisplay
+    - triCode
+    - sportId
+    - type
+    - sid
+    - socialFooter
+    - bettingOddsSchedule
+    - internalName
+    - sportIds
+    - leagueIds
+    - disableDynamicFieldView
+    - disableDynamicFieldViewDesktop
+    - disableDynamicFieldViewMobile
+    - disableFieldVision
+    - disableFieldVisionOD
+    - useFallbackFV
+    - fieldVisionLiveFreeGameOnly
+    - disableDynamicUniforms
+    status: data_response
+- host: https://statsapi.mlb.com
+  path_template: api/v1/standings?leagueId={leagueIds}&season={season}&date={gameDate}&hydrate=division
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - leagueIds
+  - season
+  - gameDate
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3601214
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1.1/game/{gamePk}/feed/live?language={language}&hydrate=ruleSettings&fields=gameData,ruleSettings
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - language
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3666189
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/schedule?gamePk={gamePk}&language={language}&hydrate=story,xrefId,lineups,broadcasts(all),probablePitcher(note),game(content(media(epg)),tickets)&useLatestGames=true&fields=dates,games,teams,probablePitcher,note,id,dates,games,broadcasts,type,name,homeAway,language,isNational,callSign,mediaState,mediaStateCode,availableForStreaming,freeGame,mediaId,dates,games,game,tickets,ticketType,ticketLinks,dates,games,content,media,epg,dates,games,lineups,homePlayers,awayPlayers,useName,lastName,primaryPosition,abbreviation,dates,games,xrefIds,xrefId,xrefType,story
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - language
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3674927
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/people/{batterId}?hydrate=stats(group=batting,type=vsPlayerTotal,opposingPlayerId={pitcherId},season={season})
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - batterId
+  - pitcherId
+  - season
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3770018
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://data-graph.mlb.com
+  path_template: graphql/?operationName=getGamesByGamePks&{query}&variables={variables}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - query
+  - variables
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3805269
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/gameday-content/?locale={locale:en}&gamePk={gamePk}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - locale:en
+  - gamePk
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3811689
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/gameday-content/?locale=en&gamePk=716463
+    http_status: 200
+    content_type: application/json
+    response_bytes: 85624
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/gameday-content/?locale=en&gamePk=716463
+    json_shape:
+    - audio
+    - tv
+    - videos
+    - recap
+    - summary
+    - epg
+    status: data_response
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/playMetrics/{gamePk}?keyMoments={keyMoments}&scoringPlays={scoringPlays}&homeRuns={homeRuns}&strikeouts={strikeouts}&hardHits={hardHits}&highLeverage={highLeverage}&leadChange={leadChange}&winProb={winProb}&absChallenge={absChallenge}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - keyMoments
+  - scoringPlays
+  - homeRuns
+  - strikeouts
+  - hardHits
+  - highLeverage
+  - leadChange
+  - winProb
+  - absChallenge
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3814490
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/playMetrics/716463?keyMoments=true&scoringPlays=true&homeRuns=true&strikeouts=true&hardHits=true&highLeverage=true&leadChange=true&winProb=true&absChallenge=true
+    http_status: 200
+    content_type: application/json
+    response_bytes: 125553
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/playMetrics/716463?keyMoments=true&scoringPlays=true&homeRuns=true&strikeouts=true&hardHits=true&highLeverage=true&leadChange=true&winProb=true&absChallenge=true
+    json_shape:
+    - scoringPlays
+    - homeRuns
+    - hardHits
+    - strikeouts
+    - leadChange
+    - highLeverage
+    - winProb
+    - keyMoments
+    - absChallenge
+    - allPlayMetrics
+    status: data_response
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/gameday-team-comparison?homeId={homeId}&awayId={awayId}&gameType={gameType}&endDate={gameDate}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - homeId
+  - awayId
+  - gameType
+  - gameDate
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 3999766
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/gameday-team-comparison?homeId=139&awayId=141&gameType=R&endDate=2023-09-23
+    http_status: 500
+    content_type: application/json
+    response_bytes: 324
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/gameday-team-comparison?homeId=139&awayId=141&gameType=R&endDate=2023-09-23
+    json_shape:
+    - error
+    status: http_error
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/spotlight-game/{locale:en-US}?gamePk={gamePk}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - locale:en-US
+  - gamePk
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4038108
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/spotlight-game/en-US?gamePk=716463
+    http_status: 200
+    content_type: application/json
+    response_bytes: 8305
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/spotlight-game/en-US?gamePk=716463
+    json_shape:
+    - flipYear
+    - useDate
+    - useSeason
+    - useSeasonState
+    - useGameType
+    - limit
+    - page
+    - playersRequested
+    - totalPages
+    - maxPlayers
+    - exceededMax
+    - players
+    - reqHeaders
+    - headers
+    - status
+    status: data_response
+- host: https://fastball-gateway.mlb.com
+  path_template: graphql/?query={query}&variables={variables}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - query
+  - variables
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4040970
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://dapi.cms.mlbinfra.com/v2/content
+  path_template: '{locale}/stories?tags.slug=gamepk-{gamePk}&$limit={limit:5}&$sort=contentDate:{sort:desc}'
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - locale
+  - gamePk
+  - limit:5
+  - sort:desc
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4062879
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://statsapi.mlb.com
+  path_template: api/v1/uniforms/game?gamePks={gamePk}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4177239
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://statsapi.mlb.com/api/v1/uniforms/game?gamePks=716463
+    http_status: 200
+    content_type: application/json;charset=UTF-8
+    response_bytes: 211
+    final_url: https://statsapi.mlb.com/api/v1/uniforms/game?gamePks=716463
+    json_shape:
+    - copyright
+    - uniforms
+    status: data_response
+- host: https://statsapi.mlb.com
+  path_template: api/v1/people?personIds={playerId}&season={season}&hydrate=stats(group=hitting,type=season,season={season},gameType={gameType})
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - playerId
+  - season
+  - gameType
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4250312
+  - 4251964
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://bdfed.stitch.mlbinfra.com
+  path_template: bdfed/matchup/{gamePk}?statList={statList}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - statList
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4270291
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/matchup/716463
+    http_status: 200
+    content_type: application/json
+    response_bytes: 3351
+    final_url: https://bdfed.stitch.mlbinfra.com/bdfed/matchup/716463
+    json_shape:
+    - probables
+    - home
+    - away
+    status: data_response
+- host: https://statsapi.mlb.com
+  path_template: api/v1/schedule?
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters: []
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4322636
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://mlbentitlementservices.mlb.com/entitlements
+  path_template: ?principalType=user&principalId={uid}&includeFeatures=true
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - uid
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 4879225
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: https://scout-insights-api.mlbinfra.com
+  path_template: api/v1/scout-game-briefings/{gamePk}/{timecode}
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  - timecode
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 5050947
+  access: Bearer token explicitly configured in client
+  verification:
+    checked_on: '2026-11-09'
+    url: https://scout-insights-api.mlbinfra.com/api/v1/scout-game-briefings/716463/20230923_231745
+    http_status: 401
+    content_type: application/json
+    response_bytes: 67
+    final_url: https://scout-insights-api.mlbinfra.com/api/v1/scout-game-briefings/716463/20230923_231745
+    json_shape:
+    - message
+    - details
+    status: http_error
+- host: https://www.mlb.com
+  path_template: apps/player-of-the-game/game/json/winners/{gamePk}.json
+  method: GET
+  method_basis: client data-fetch path configuration
+  parameters:
+  - gamePk
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 5146889
+  access: not determined from template alone
+  verification:
+    checked_on: '2026-11-09'
+    url: https://www.mlb.com/apps/player-of-the-game/game/json/winners/716463.json
+    http_status: 403
+    content_type: application/xml
+    response_bytes: 243
+    final_url: https://www.mlb.com/apps/player-of-the-game/game/json/winners/716463.json
+    status: non_json_response
+    body_prefix: '<?xml version="1.0" encoding="UTF-8"?>
+
+      <Error><Code>AccessDenied</Code><Message>Access Denied</Messa'
+- host: wss://ws.statsapi.mlb.com
+  path_template: api/v1/game/push/subscribe/gameday/{gamePk}
+  method: WebSocket
+  method_basis: WebSocket subscription configuration
+  parameters:
+  - gamePk
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 5430003
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+- host: wss://ws.statsapi.mlb.com
+  path_template: api/v1/game/push/subscribe/{gamePk}
+  method: WebSocket
+  method_basis: WebSocket subscription configuration
+  parameters:
+  - gamePk
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 5430112
+  access: not determined from template alone
+  verification:
+    status: source_discovered_not_probed
+additional_routes:
+- host: https://statsapi.mlb.com
+  path_template: /api/v1/game/{pk}/feed/color?language={lang}
+  method: GET
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offsets:
+  - 898243
+  - 898404
+  - 898484
+  verification:
+    checked_on: '2026-11-09'
+    url: https://statsapi.mlb.com/api/v1/game/716463/feed/color?language=en
+    http_status: 404
+    content_type: null
+    response_bytes: 0
+    final_url: https://statsapi.mlb.com/api/v1/game/716463/feed/color?language=en
+    status: non_json_response

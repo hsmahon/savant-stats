@@ -1,0 +1,4765 @@
+reviewed_on: '2026-11-09'
+status: Public Fastball schema inventoried plus source-frontier audit of stated Film Room/Gameday deployments; Data
+  Graph introspection disabled and configured CMS DNS unavailable. No claim about all private MLB services.
+primary_surface: https://www.mlb.com/video
+coverage:
+  film_room_bundle_bytes: 3669812
+  server_document_variants: 19
+  client_only_operations_excluded_from_endpoint_count: 35
+  server_operation_names: 20
+  server_document_variants_including_gameday_and_geo: 22
+  read_query_names_verified_with_data_or_empty_valid_result: 15
+  rest_operations: 5
+  not_executed_server_mutations:
+  - CreateReel
+  - DeleteReel
+  not_executed_server_queries:
+  - getReels
+  - ValidateReel
+  search_filter_definitions_returned: 193
+  original_source_frontier: Film Room source map queries/index.js, mutations/index.js, queries/fragments.js, all
+    bdvp-graphql local resolver and transport modules inspected. Application modules scanned for additional network
+    URLs; source-only CMS configuration leads remain unverified.
+  fastball_schema_query_root_fields: 26
+  fastball_schema_mutation_root_fields: 2
+  fastball_schema_type_definitions: 107
+  fastball_schema_fields_beyond_inspected_client_documents:
+  - types
+  - commonFields
+  - people
+  - teams
+  - getReelBySlug
+  - story
+  - userStory
+  - playerStory
+  - sections
+  - sectionTypes
+  - sectionTypeFields
+operations:
+- name: Search
+  operation_type: query
+  variables:
+    query: String!
+    page: Int
+    limit: Int
+    feedPreference: FeedPreference
+    languagePreference: LanguagePreference
+    contentPreference: ContentPreference
+    forgeInstance: ForgeType = MLB
+    queryType: QueryType = STRUCTURED
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2600208
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: mixed server query and client-only selections
+  purpose: Structured or natural-language video search with pagination and content/feed/language preferences.
+  response_fields_from_source: &id001
+  - search.plays[].mediaPlayback
+  - search.total
+  variant_id: Search_2600208
+  probe:
+    http_status: 200
+    input_variables: &id002
+      query: ContentTags = ["condensed-game"] Order By Timestamp DESC
+      limit: 1
+      page: 0
+      languagePreference: EN
+      contentPreference: MIXED
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - search
+  notes: Three application document variants share this operation name; selection sets differ. The mixed variant
+    includes local isInReel @client and must have that selection removed by Apollo before transport.
+  additional_verification: Browser FREETEXT search Aaron Judge home runs returned 200 JSON and 782 results; CMS_FIRST
+    and MIXED requests observed.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 7
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 120
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 153
+  document: |
+    query Search(
+        $query: String!
+        $page: Int
+        $limit: Int
+        $feedPreference: FeedPreference
+        $languagePreference: LanguagePreference
+        $contentPreference: ContentPreference
+        $forgeInstance: ForgeType = MLB
+        $queryType: QueryType = STRUCTURED
+    ) {
+        search(
+            query: $query
+            limit: $limit
+            page: $page
+            feedPreference: $feedPreference
+            languagePreference: $languagePreference
+            contentPreference: $contentPreference
+            forgeInstance: $forgeInstance
+            queryType: $queryType
+        ) {
+            plays {
+                mediaPlayback {
+                    id
+                    slug
+                    blurb
+                    date
+                    description
+                    title
+                    canAddToReel
+                    feeds {
+                        type
+                        duration
+                        image {
+                            altText
+                            templateUrl
+                            cuts {
+                                width
+                                src
+                            }
+                        }
+                        playbacks {
+                            name
+                        }
+                    }
+                    playInfo {
+                        balls
+                        strikes
+                        outs
+                        inning
+                        inningHalf
+                        pitchSpeed
+                        pitchType
+                        exitVelocity
+                        hitDistance
+                        launchAngle
+                        spinRate
+                        scoreDifferential
+                        gamePk
+                        runners {
+                            first
+                            second
+                            third
+                        }
+                        teams {
+                            away {
+                                name
+                                shortName
+                                triCode
+                            }
+                            home {
+                                name
+                                shortName
+                                triCode
+                            }
+                            batting {
+                                name
+                                shortName
+                                triCode
+                            }
+                            pitching {
+                                name
+                                shortName
+                                triCode
+                            }
+                        }
+                        players {
+                            pitcher {
+                                id
+                                name
+                                lastName
+                                playerHand
+                            }
+                            batter {
+                                id
+                                name
+                                lastName
+                                playerHand
+                            }
+                        }
+                    }
+                    isInReel @client
+                    keywordsDisplay {
+                        slug
+                        displayName
+                    }
+                }
+            }
+            total
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - search
+- name: Search
+  operation_type: query
+  variables:
+    query: String!
+    page: Int
+    limit: Int
+    feedPreference: FeedPreference
+    languagePreference: LanguagePreference
+    contentPreference: ContentPreference
+    forgeInstance: ForgeType = MLB
+    queryType: QueryType = STRUCTURED
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2603894
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Structured or natural-language video search with pagination and content/feed/language preferences.
+  response_fields_from_source: *id001
+  variant_id: Search_2603894
+  probe:
+    http_status: 200
+    input_variables: *id002
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - search
+  notes: Three application document variants share this operation name; selection sets differ. The mixed variant
+    includes local isInReel @client and must have that selection removed by Apollo before transport.
+  additional_verification: Browser FREETEXT search Aaron Judge home runs returned 200 JSON and 782 results; CMS_FIRST
+    and MIXED requests observed.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 7
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 120
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 153
+  document: |
+    query Search(
+        $query: String!
+        $page: Int
+        $limit: Int
+        $feedPreference: FeedPreference
+        $languagePreference: LanguagePreference
+        $contentPreference: ContentPreference
+        $forgeInstance: ForgeType = MLB
+        $queryType: QueryType = STRUCTURED
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        search(
+            query: $query
+            limit: $limit
+            page: $page
+            feedPreference: $feedPreference
+            languagePreference: $languagePreference
+            contentPreference: $contentPreference
+            forgeInstance: $forgeInstance
+            queryType: $queryType
+        ) {
+            plays {
+                mediaPlayback {
+                    ...MediaPlaybackFields
+                }
+            }
+            total
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - search
+- name: Search
+  operation_type: query
+  variables:
+    query: String!
+    page: Int
+    limit: Int
+    feedPreference: FeedPreference
+    languagePreference: LanguagePreference
+    contentPreference: ContentPreference
+    forgeInstance: ForgeType = MLB
+    queryType: QueryType = STRUCTURED
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2604805
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Structured or natural-language video search with pagination and content/feed/language preferences.
+  response_fields_from_source: *id001
+  variant_id: Search_2604805
+  probe:
+    http_status: 200
+    input_variables: *id002
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - search
+  notes: Three application document variants share this operation name; selection sets differ. The mixed variant
+    includes local isInReel @client and must have that selection removed by Apollo before transport.
+  additional_verification: Browser FREETEXT search Aaron Judge home runs returned 200 JSON and 782 results; CMS_FIRST
+    and MIXED requests observed.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 7
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 120
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 153
+  document: |
+    query Search(
+        $query: String!
+        $page: Int
+        $limit: Int
+        $feedPreference: FeedPreference
+        $languagePreference: LanguagePreference
+        $contentPreference: ContentPreference
+        $forgeInstance: ForgeType = MLB
+        $queryType: QueryType = STRUCTURED
+    ) {
+        search(
+            query: $query
+            limit: $limit
+            page: $page
+            feedPreference: $feedPreference
+            languagePreference: $languagePreference
+            contentPreference: $contentPreference
+            forgeInstance: $forgeInstance
+            queryType: $queryType
+        ) {
+            plays {
+                gamePk
+                gameDate
+                mediaPlayback {
+                    playInfo {
+                        teams {
+                            away {
+                                id
+                            }
+                            home {
+                                id
+                            }
+                        }
+                    }
+                }
+            }
+            total
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - search
+- name: getQueryInfo
+  operation_type: query
+  variables:
+    queries: '[String]!'
+    queryType: QueryType = STRUCTURED
+    includeCount: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2605982
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Parse and validate search expressions; optionally count matching results.
+  response_fields_from_source:
+  - queryInfo[].valid
+  - queryInfo[].graph
+  - queryInfo[].count
+  variant_id: getQueryInfo_2605982
+  probe:
+    http_status: 200
+    input_variables:
+      queries:
+      - ContentTags = ["condensed-game"] Order By Timestamp DESC
+      includeCount: true
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - queryInfo
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 195
+  document: |
+    query getQueryInfo(
+        $queries: [String]!
+        $queryType: QueryType = STRUCTURED
+        $includeCount: Boolean = false
+    ) {
+        queryInfo(queries: $queries, queryType: $queryType) {
+            query
+            valid
+            graph
+            count @include(if: $includeCount)
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - queryInfo
+- name: getFields
+  operation_type: query
+  variables:
+    ids: '[Int]'
+    idsSkipValues: '[Int]'
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2606343
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public data for tested request
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Search/filter field metadata, values, ranges and units.
+  response_fields_from_source:
+  - withValues
+  - withoutValues
+  variant_id: getFields_2606343
+  probe:
+    http_status: 200
+    input_variables:
+      ids:
+      - 9
+      - 17
+      - 183
+      - 34
+      - 4
+      - 19
+      - 20
+      - 87
+      - 22
+      - 23
+      - 24
+      - 177
+      - 31
+      - 145
+      - 133
+      - 134
+      - 135
+      - 30
+      - 176
+      - 92
+      - 5
+      - 25
+      idsSkipValues:
+      - 164
+      - 114
+      - 116
+      - 13
+      - 15
+      - 165
+      - 3
+      - 32
+      - 53
+      - 139
+      - 140
+      - 141
+    transport: GET
+    result: JSON withValues and withoutValues field metadata
+    returned_root_fields:
+    - withValues
+    - withoutValues
+  notes: Field definitions, enum values, ranges, units and helper text returned. A separate registry request returned
+    193 definitions; empty/null ID lists act as unfiltered selectors rather than selecting zero fields.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 210
+  document: |
+    query getFields($ids: [Int], $idsSkipValues: [Int]) {
+        withValues: fields(ids: $ids) {
+            ...CoreSearchFieldMetadata
+            values {
+                value
+                displayValue
+            }
+        }
+        withoutValues: fields(ids: $idsSkipValues) {
+            ...CoreSearchFieldMetadata
+        }
+    }
+  required_fragments:
+  - CoreSearchFieldMetadata
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - fields
+  - fields
+- name: clipQuery
+  operation_type: query
+  variables:
+    ids: '[String]'
+    languagePreference: LanguagePreference
+    idType: MediaPlaybackIdType
+    forgeInstance: ForgeType = MLB
+    userId: String!
+    withUser: Boolean!
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2606737
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Resolve media playback metadata by IDs or slugs.
+  response_fields_from_source:
+  - mediaPlayback[]
+  - userInfo (conditional)
+  variant_id: clipQuery_2606737
+  probe:
+    http_status: 200
+    input_variables:
+      ids:
+      - blue-jays-vs-rays-highlights-x6166
+      idType: SLUG
+      userId: ''
+      withUser: false
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - mediaPlayback
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 226
+  document: |
+    query clipQuery(
+        $ids: [String]
+        $languagePreference: LanguagePreference
+        $idType: MediaPlaybackIdType
+        $forgeInstance: ForgeType = MLB
+        $userId: String!
+        $withUser: Boolean!
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        mediaPlayback(
+            ids: $ids
+            languagePreference: $languagePreference
+            idType: $idType
+            forgeInstance: $forgeInstance
+        ) {
+            ...MediaPlaybackFields
+        }
+        userInfo(userId: $userId) @include(if: $withUser) {
+            firstName
+            nickName
+            userId
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - mediaPlayback
+  - userInfo
+- name: getTopic
+  operation_type: query
+  variables:
+    topicId: String!
+    languagePreference: LanguagePreference
+    limit: Int
+    page: Int
+    videoSlug: String
+    contentGroup: ContentGroup
+    videoTranslationId: String
+    sessionId: String
+    forgeInstance: ForgeType = MLB
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2607441
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Paginated topic playlist and recommendation metadata.
+  response_fields_from_source:
+  - topicPlayList.hasMore
+  - topicPlayList.mediaPlayback[]
+  - topicPlayList.modelType
+  - topicPlayList.modelVersion
+  variant_id: getTopic_2607441
+  probe:
+    http_status: 200
+    input_variables:
+      topicId: most-popular
+      languagePreference: EN
+      limit: 1
+      page: 0
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - topicPlayList
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 253
+  document: |
+    query getTopic(
+        $topicId: String!
+        $languagePreference: LanguagePreference
+        $limit: Int
+        $page: Int
+        $videoSlug: String
+        $contentGroup: ContentGroup
+        $videoTranslationId: String
+        $sessionId: String
+        $forgeInstance: ForgeType = MLB
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        topicPlayList(
+            topicId: $topicId
+            languagePreference: $languagePreference
+            limit: $limit
+            page: $page
+            videoSlug: $videoSlug
+            contentGroup: $contentGroup
+            videoTranslationId: $videoTranslationId
+            sessionId: $sessionId
+            forgeInstance: $forgeInstance
+        ) {
+            hasMore
+            title
+            puid
+            modelType
+            modelVersion
+            mediaPlayback {
+                ...MediaPlaybackFields
+            }
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - topicPlayList
+- name: getReels
+  operation_type: query
+  variables:
+    userId: String!
+    limit: Int
+    page: Int
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2609900
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source document only; not called
+  access: user-scoped resolver access not established; not called
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: User reel listing and owner display metadata; user-specific.
+  response_fields_from_source:
+  - getReels.total
+  - getReels.reels[]
+  - userInfo
+  variant_id: getReels_2609900
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 373
+  document: |
+    query getReels(
+        $userId: String!
+        $limit: Int
+        $page: Int
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        getReels(userId: $userId, limit: $limit, page: $page) {
+            total
+            reels {
+                id
+                mediaPlayback {
+                    ...MediaPlaybackFields
+                }
+            }
+        }
+        userInfo(userId: $userId) {
+            firstName
+            nickName
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - getReels
+  - userInfo
+- name: ValidateReel
+  operation_type: query
+  variables:
+    reelRequest: ReelInput!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2610543
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: client document and introspected interface confirmed; resolver not called
+  access: resolver data behavior/access not established; no validation payload was constructed
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Validate a ReelInput; complete input metadata is now retained in mlb_fastball_schema.json.
+  response_fields_from_source:
+  - validateReel.valid
+  - validateReel.errors
+  variant_id: ValidateReel_2610543
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 403
+  document: |
+    query ValidateReel($reelRequest: ReelInput!) {
+        validateReel(reelRequest: $reelRequest) {
+            valid
+            errors
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - validateReel
+- name: getUserSuggestions
+  operation_type: query
+  variables:
+    limit: Int
+    languagePreference: LanguagePreference
+    userLocation: UserLocation!
+    experience: String!
+    forgeInstance: ForgeType = MLB
+    userId: String
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2611251
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Anonymous or user-context video recommendations.
+  response_fields_from_source:
+  - userSuggestions[]
+  variant_id: getUserSuggestions_2611251
+  probe:
+    http_status: 200
+    input_variables:
+      userId: anonymous
+      userLocation:
+        country: US
+      limit: 1
+      experience: VIDEO_MULTIPLE_PREFERENCES
+      languagePreference: EN
+      forgeInstance: MLB
+    transport: GET
+    result: 200 JSON with empty recommendation list; input-shape acceptance only
+    returned_root_fields:
+    - userSuggestions
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 438
+  source_defaults:
+    userId: anonymous
+    forgeInstance: MLB
+    withPlaybacksSegments: false
+  document: |
+    query getUserSuggestions(
+        $limit: Int
+        $languagePreference: LanguagePreference
+        $userLocation: UserLocation!
+        $experience: String!
+        $forgeInstance: ForgeType = MLB
+        $userId: String = "anonymous"
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        userSuggestions(
+            limit: $limit
+            languagePreference: $languagePreference
+            userLocation: $userLocation
+            experience: $experience
+            forgeInstance: $forgeInstance
+            userId: $userId
+        ) {
+            ...MediaPlaybackFields
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - userSuggestions
+- name: getContentTagDisplayValues
+  operation_type: query
+  variables:
+    contentTags: '[String!]'
+    forgeInstance: ForgeType = MLB
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2612607
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Translate content-tag slugs into display names.
+  response_fields_from_source:
+  - contentTagDisplayValues[].slug
+  - contentTagDisplayValues[].displayName
+  variant_id: getContentTagDisplayValues_2612607
+  probe:
+    http_status: 200
+    input_variables:
+      contentTags:
+      - condensed-game
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - contentTagDisplayValues
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 477
+  document: |
+    query getContentTagDisplayValues(
+        $contentTags: [String!]
+        $forgeInstance: ForgeType = MLB
+    ) {
+        contentTagDisplayValues(
+            contentTags: $contentTags
+            forgeInstance: $forgeInstance
+        ) {
+            slug
+            displayName
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - contentTagDisplayValues
+- name: getGameStatus
+  operation_type: query
+  variables:
+    ids: '[Int]!'
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2613062
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Game status/date for a list of game IDs.
+  response_fields_from_source:
+  - games[].status
+  - games[].gameDate
+  variant_id: getGameStatus_2613062
+  probe:
+    http_status: 200
+    input_variables:
+      ids:
+      - 716463
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - games
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 498
+  document: |
+    query getGameStatus($ids: [Int]!) {
+        games(ids: $ids) {
+            status
+            gameDate
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - games
+- name: getGames
+  operation_type: query
+  variables:
+    ids: '[Int]!'
+    languagePreference: LanguagePreference
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2613227
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Game content, condensed media, linescore, teams and decisions.
+  response_fields_from_source:
+  - games[].mediaPlayback
+  - games[].lineScore
+  - games[].decisions
+  variant_id: getGames_2613227
+  probe:
+    http_status: 200
+    input_variables:
+      ids:
+      - 716463
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - games
+  notes: Metadata-only query; withPlaybacksSegments=false retains media URLs without requesting segments.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 507
+  document: |
+    query getGames(
+        $ids: [Int]!
+        $languagePreference: LanguagePreference
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        games(ids: $ids, languagePreference: $languagePreference) {
+            mediaPlayback {
+                ...MediaPlaybackFields
+            }
+            lineScore {
+                inning
+                inningHalf
+                inningState
+                outs
+                balls
+                strikes
+                away {
+                    runs
+                    hits
+                    errors
+                }
+                home {
+                    runs
+                    hits
+                    errors
+                }
+                innings {
+                    num
+                    ordinalNum
+                    home {
+                        runs
+                        hits
+                        errors
+                    }
+                    away {
+                        runs
+                        hits
+                        errors
+                    }
+                }
+            }
+            venueId
+            gameDate
+            gamePk
+            away {
+                id
+                name
+                shortName
+                abbreviation
+            }
+            home {
+                id
+                name
+                shortName
+                abbreviation
+            }
+            status
+            decisions {
+                winner {
+                    id
+                    name
+                    playerHand
+                    innings
+                    earnedRuns
+                    strikeouts
+                    era
+                    wins
+                    losses
+                    saves
+                }
+                loser {
+                    id
+                    name
+                    playerHand
+                    innings
+                    earnedRuns
+                    strikeouts
+                    era
+                    wins
+                    losses
+                    saves
+                }
+                save {
+                    id
+                    name
+                    playerHand
+                    innings
+                    earnedRuns
+                    strikeouts
+                    era
+                    wins
+                    losses
+                    saves
+                }
+            }
+            image {
+                title
+                altText
+                templateUrl
+            }
+            headline
+            seoTitle
+            storyUrl
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - games
+- name: getSuggestedSearches
+  operation_type: query
+  variables:
+    total: Int
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2615980
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  response_root_fields:
+  - suggestedSearches
+  purpose: Suggested natural-language search strings.
+  response_fields_from_source:
+  - suggestedSearches[]
+  variant_id: getSuggestedSearches_2615980
+  probe:
+    http_status: 200
+    input_variables:
+      total: 1
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - suggestedSearches
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 616
+  document: |
+    query getSuggestedSearches($total: Int) {
+        suggestedSearches(total: $total)
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - suggestedSearches
+- name: getContainers
+  operation_type: query
+  variables:
+    ids: '[String]!'
+    idType: CriterionIdType = NAME
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2616117
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: public response for tested input; no guarantee for other datasets
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  response_root_fields:
+  - containers
+  purpose: Home page carousel/layout definitions and stored search expressions.
+  response_fields_from_source:
+  - containers.containers[].sections[].fields[]
+  variant_id: getContainers_2616117
+  probe:
+    http_status: 200
+    input_variables:
+      ids:
+      - Homepage V1
+      idType: NAME
+    transport: GET
+    result: JSON data
+    returned_root_fields:
+    - containers
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 622
+  document: |
+    query getContainers($ids: [String]!, $idType: CriterionIdType = NAME) {
+        containers(ids: $ids, idType: $idType) {
+            containers {
+                sections {
+                    id
+                    type {
+                        name
+                    }
+                    fields {
+                        type
+                        name
+                        value
+                    }
+                }
+            }
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - containers
+- name: getUserInfo
+  operation_type: query
+  variables:
+    userId: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2616639
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: observed browser request
+  access: anonymous browser input returned empty/default profile
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  response_root_fields:
+  - userInfo
+  purpose: Followed players/teams and favorite team for an application-supplied user ID.
+  response_fields_from_source:
+  - userInfo.followedPlayers
+  - userInfo.followedTeams
+  - userInfo.favoriteTeam
+  variant_id: getUserInfo_2616639
+  probe:
+    http_status: 200
+    input_variables:
+      userId: ''
+    transport: GET
+    result: 200 JSON; no other user IDs tried
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 642
+  document: |
+    query getUserInfo($userId: String!) {
+        userInfo(userId: $userId) {
+            followedPlayers {
+                id
+                lastName
+                name
+            }
+            followedTeams {
+                id
+                name
+                shortName
+            }
+            favoriteTeam {
+                id
+                name
+                shortName
+            }
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - userInfo
+- name: getSuggestedStories
+  operation_type: query
+  variables:
+    preview: Boolean
+    languagePreference: LanguagePreference
+    search: String!
+    searchType: StoriesSearchType = VSM_SLUG
+    limit: Int
+    skip: Int
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2617169
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  access: service responded with GraphQL resolver error; usable data not established for tested input
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: GET
+  classification: server operation
+  purpose: Related editorial/story suggestions from a clip slug.
+  response_fields_from_source:
+  - suggestedStories[].storyType
+  - suggestedStories[].metadata
+  variant_id: getSuggestedStories_2617169
+  probe:
+    http_status: 200
+    input_variables:
+      search: blue-jays-vs-rays-highlights-x6166
+      limit: 1
+      skip: 0
+    transport: GET
+    result: GraphQL errors
+    returned_root_fields:
+    - suggestedStories
+    error_summary: 'Exception while fetching data (/suggestedStories) : Cannot invoke "java.util.List.stream()"
+      because "forgeStoryPreviews" is null'
+  notes: HTTP 200 contained a resolver error for tested clip slug; do not treat HTTP status alone as success.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 664
+  document: |
+    query getSuggestedStories(
+        $preview: Boolean
+        $languagePreference: LanguagePreference
+        $search: String!
+        $searchType: StoriesSearchType = VSM_SLUG
+        $limit: Int
+        $skip: Int
+    ) {
+        suggestedStories(
+            preview: $preview
+            languagePreference: $languagePreference
+            search: $search
+            searchType: $searchType
+            limit: $limit
+            skip: $skip
+        ) {
+            storyType
+            title
+            metadata
+            image {
+                templateUrl
+            }
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - suggestedStories
+- name: CreateReel
+  operation_type: mutation
+  variables:
+    reelRequest: ReelInput!
+    withPlaybacksSegments: Boolean = false
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2621221
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: POST (source-defined mutation; not executed)
+  classification: server operation
+  purpose: Create a saved reel (mutation, not executed).
+  response_fields_from_source:
+  - addReel
+  variant_id: CreateReel_2621221
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 141
+  document: |
+    mutation CreateReel(
+        $reelRequest: ReelInput!
+        $withPlaybacksSegments: Boolean = false
+    ) {
+        addReel(reelRequest: $reelRequest) {
+            id
+            reelTitle
+            reelSlug
+            videoUrl
+            thumbnailUrl
+            duration
+            createdAt
+            valid
+            errors
+            mediaPlayback {
+                ...MediaPlaybackFields
+            }
+        }
+    }
+  required_fragments:
+  - MediaPlaybackFields
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  document_execution: Source retained only; mutation was not executed.
+  server_root_fields:
+  - addReel
+- name: DeleteReel
+  operation_type: mutation
+  variables:
+    reelId: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2621730
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  endpoint: https://fastball-gateway.mlb.com/graphql
+  method: POST (source-defined mutation; not executed)
+  classification: server operation
+  purpose: Delete a saved reel (mutation, not executed).
+  response_fields_from_source:
+  - deleteReel.deleted
+  - deleteReel.reelId
+  variant_id: DeleteReel_2621730
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 164
+  document: |
+    mutation DeleteReel(
+        $reelId: String!
+    ) {
+        deleteReel(reelId: $reelId) {
+            deleted
+            reelId
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  document_execution: Source retained only; mutation was not executed.
+  server_root_fields:
+  - deleteReel
+- name: getGamesByGamePks
+  variant_id: getGamesByGamePks_gameday
+  operation_type: query
+  endpoint: https://data-graph.mlb.com/graphql
+  method: POST verified; source also defines GET/persisted-query form
+  purpose: Per-game video content, editorial recap and related articles.
+  variables:
+    gamePks: '[Int]'
+    locale: Language
+    gameRecapTags: '[String]!'
+    relatedArticleTags: '[String]!'
+    contentSource: ContentSource
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offset: 3814874
+  checked_on: '2026-11-09'
+  verification: read-only query called anonymously
+  probe:
+    http_status: 200
+    input_variables:
+      gamePks:
+      - 716463
+      locale: EN_US
+      gameRecapTags:
+      - game-recap
+      relatedArticleTags:
+      - storytype-article
+      contentSource: MLB
+    result: 200 JSON data.getGamesByGamePks[].content; 25 videoContent records for game 716463
+    transport: POST
+    other_attempts: Full-query and source-defined persisted-query GETs both returned 400 with empty body.
+  response_fields_from_source:
+  - getGamesByGamePks[].content.videoContent[].guid (alias of playGuid)
+  - getGamesByGamePks[].content.videoContent[].playIdRef
+  - getGamesByGamePks[].content.videoContent[].playbacks (alias of playbackScenarios)
+  - getGamesByGamePks[].content.recapArticle
+  - getGamesByGamePks[].content.relatedArticles
+  access: public data for tested POST query
+  notes: Source persisted query hash e12a5c2692406844d5f15f52ce7754208f53da81867de7d3e9e773611f4a040a; accepted
+    GET transport not established. Source locale map uses EN_US/ES_US/JA_JP; contentSource map uses MLB/MILB.
+  document: |
+    query getGamesByGamePks(
+      $gamePks: [Int]
+      $locale: Language
+      $gameRecapTags: [String]!
+      $relatedArticleTags: [String]!
+      $contentSource: ContentSource
+    ) {
+      getGamesByGamePks(gamePks: $gamePks) {
+        gamePk
+        gameDate
+        content {
+          videoContent(locale: $locale, contentSource: $contentSource) {
+            headline
+            duration
+            title
+            accessibilityText
+            description
+            slug
+            id: slug
+            blurb
+            guid: playGuid
+            playIdRef
+            date: contentDate
+            contentDate
+            preferredPlaybackScenarioURL(preferredPlaybacks: ["hlsCloud", "mp4Avc"])
+            playbacks: playbackScenarios {
+              name: playback
+              url: location
+            }
+            thumbnail {
+              templateUrl
+            }
+            tags {
+              ...mediaTags
+            }
+          }
+          ... on GameContent {
+            recapArticle: articleContent(locale: $locale, tags: $gameRecapTags, limit: 1, contentSource: $contentSource) {
+              ...articleFields
+            }
+            relatedArticles: articleContent(locale: $locale, tags: $relatedArticleTags, excludeTags: $gameRecapTags, contentSource: $contentSource limit: 5) {
+              ...articleFields
+            }
+          }
+        }
+      }
+    }
+
+    fragment mediaTags on Tag {
+      ... on GameTag {
+        slug
+        type
+        title
+        gamePk
+      }
+      ... on TaxonomyTag {
+        slug
+        type
+        title
+      }
+      ... on InternalTag {
+        slug
+        type
+        title
+      }
+      ... on TeamTag {
+        type
+        team {
+          id
+        }
+      }
+    }
+
+    fragment articleFields on Article {
+      contentDate
+      description
+      headline
+      slug
+      blurb: summary
+      templateUrl: thumbnail
+      type
+      tags {
+        ...mediaTags
+      }
+    }
+  required_fragments:
+  - mediaTags
+  - articleFields
+  fragment_note: The source-defined document includes its mediaTags and articleFields definitions inline.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - getGamesByGamePks
+- name: getPlayerStories
+  variant_id: getPlayerStories_gameday
+  operation_type: query
+  endpoint: https://fastball-gateway.mlb.com/graphql/
+  method: GET
+  variables:
+    playerIds: '[Int]!'
+    experience: PlayerStoryExperience = PLAYER_HIGHLIGHTS
+  purpose: Check availability of player highlight stories.
+  source: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  source_character_offset: 4041105
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  probe:
+    http_status: 200
+    input_variables:
+      playerIds:
+      - 592450
+    result: 200 JSON playerStories[].valid=false for tested player
+  access: public response, no story available for tested input
+  document: |
+    query getPlayerStories($playerIds: [Int]!, $experience: PlayerStoryExperience = PLAYER_HIGHLIGHTS) {playerStories(playerIds: $playerIds, experience:$experience) {valid}}
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - playerStories
+- name: UserQuery
+  variant_id: UserQuery_filmroom
+  operation_type: query
+  endpoint: https://data-graph.mlb.com/graphql
+  method: POST
+  variables: {}
+  purpose: Resolve current request geolocation for media recommendations.
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2760988
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  probe:
+    http_status: 200
+    transport: POST
+    result: JSON data.user.geoDetection with metroCode, postalCode, country; location values intentionally omitted
+  access: public for tested request
+  notes: Film Room userLocation is an Apollo local resolver that performs this remote query. Optional bearer authorization
+    may be added by an authenticated application; no token was supplied.
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/resolvers/userLocation.js
+    line: 23
+  document: |
+    query UserQuery {
+        user {
+            geoDetection {
+                metroCode
+                postalCode
+                country
+            }
+        }
+    }
+  required_fragments: []
+  fragment_note: Append each required fragment from fragment_definitions exactly once. Omit local @client selections
+    in documents/fragments before server transport.
+  document_role: Declarative client interface definition; not a server schema or a runnable example.
+  server_root_fields:
+  - user
+client_only_operations:
+- name: getSelectedFilters
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2608438
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 290
+- name: getSearchSort
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2608781
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 307
+- name: getPage
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2608872
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 313
+- name: getModals
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2608951
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 319
+- name: getNavItems
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2609034
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 325
+- name: getIsEU
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2609170
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 334
+- name: getTargetOffer
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2609249
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 340
+- name: getReel
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2609342
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 346
+- name: getShareMediaId
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2609805
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 367
+- name: getReelClipTrimmingMediaId
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2610434
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 397
+- name: getUserData
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2610732
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 412
+- name: getUserLocation
+  operation_type: query
+  variables:
+    token: String
+    runTimeConfig: String
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2610915
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 422
+- name: getNotification
+  operation_type: query
+  variables:
+    id: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2612263
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 462
+- name: getDeleteReelId
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2612465
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 471
+- name: getIsSorting
+  operation_type: query
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2612960
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/queries/index.js
+    line: 492
+- name: SetSelectedFilters
+  operation_type: mutation
+  variables:
+    selectedFilters: '[FilterSelection]!'
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2617851
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 7
+- name: RemoveSelectedFilter
+  operation_type: mutation
+  variables:
+    fieldName: String!
+    value: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618031
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 13
+- name: AddSelectedFilter
+  operation_type: mutation
+  variables:
+    filter: FilterSelection!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618218
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 19
+- name: SetSearchSort
+  operation_type: mutation
+  variables:
+    searchSort: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618367
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 25
+- name: ModalShow
+  operation_type: mutation
+  variables:
+    name: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618602
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 31
+- name: ModalHide
+  operation_type: mutation
+  variables:
+    name: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618728
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 37
+- name: ModalToggle
+  operation_type: mutation
+  variables:
+    name: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618856
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 43
+- name: SetIsEU
+  operation_type: mutation
+  variables:
+    isEU: Boolean
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2618985
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 49
+- name: SetTargetOffer
+  operation_type: mutation
+  variables:
+    targetOffer: String
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2619114
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 55
+- name: SetReel
+  operation_type: mutation
+  variables:
+    reel: Reel!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2619268
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 61
+- name: ResetReel
+  operation_type: mutation
+  variables: {}
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2619388
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 67
+- name: AddReelClip
+  operation_type: mutation
+  variables:
+    mediaId: String!
+    title: String!
+    clipSlug: String!
+    feedType: String!
+    thumbnailUrl: String!
+    originalDuration: Float!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2619488
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 73
+- name: RemoveReelClip
+  operation_type: mutation
+  variables:
+    mediaId: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2620017
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 93
+- name: ReorderReelClip
+  operation_type: mutation
+  variables:
+    startIndex: Int!
+    endIndex: Int!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2620169
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 99
+- name: UpdateReelClip
+  operation_type: mutation
+  variables:
+    mediaId: String!
+    offsetStartTime: Float
+    offsetEndTime: Float
+    originalDuration: Float
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2620367
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 105
+- name: SetReelClipTrimmingMediaId
+  operation_type: mutation
+  variables:
+    mediaId: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2620810
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 121
+- name: SetShareMediaId
+  operation_type: mutation
+  variables:
+    mediaId: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2621030
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 131
+- name: dismissNotification
+  operation_type: mutation
+  variables:
+    id: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2621936
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 175
+- name: SetDeleteReelId
+  operation_type: mutation
+  variables:
+    mediaId: String!
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2622125
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 185
+- name: SetIsSorting
+  operation_type: mutation
+  variables:
+    isSorting: Boolean
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2622338
+  discovery: first-party Film Room application GraphQL document
+  checked_on: '2026-11-09'
+  verification: source only; not called
+  access: not established
+  classification: Apollo client cache operation, not a server endpoint
+  original_source_locations:
+  - source_map: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+    source_name: webpack:///./node_modules/bdvp-graphql/src/mutations/index.js
+    line: 195
+rest_operations:
+- name: typeahead_judge
+  method: GET
+  url_template: https://typeahead.mlb.com/api/v1/typeahead/suggestions/{input}
+  purpose: Search suggestions grouped into players, teams, searchTerms and tags.
+  source: https://www.mlb.com/video
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  probe:
+    url: https://typeahead.mlb.com/api/v1/typeahead/suggestions/Judge
+    http_status: 200
+    content_type: application/json
+    result: JSON players[] includes Aaron Judge playerId=592450 and teamId=147; full search phrase had empty arrays
+  access: public response for tested request
+  parameters:
+    input: URL-encoded text appended to path
+    q: Optional query-string serialized suggestions options, as constructed by client
+- name: runtime_config
+  method: GET
+  url_template: https://www.mlbstatic.com/mlb.com/video/config/mlb-vpp-aws/runtime_config.json
+  purpose: External media runtime configuration overlay.
+  source: https://www.mlb.com/video
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  probe:
+    url: https://www.mlbstatic.com/mlb.com/video/config/mlb-vpp-aws/runtime_config.json
+    http_status: 200
+    content_type: application/json
+    result: JSON data
+  access: public response for tested request
+- name: dictionary
+  method: GET
+  url_template: https://bdfed.stitch.mlbinfra.com/bdfed/contentful/dictionary/mlb-filmroom/{lang}-US?dictionaryKeys=filmroom
+  purpose: Film Room translated user-interface strings.
+  source: https://www.mlb.com/video
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  probe:
+    url: https://bdfed.stitch.mlbinfra.com/bdfed/contentful/dictionary/mlb-filmroom/en-US?dictionaryKeys=filmroom
+    http_status: 200
+    content_type: application/json
+    result: JSON data
+  access: public response for tested request
+- name: vizcast
+  method: GET
+  url_template: https://dapi.mlbinfra.com/v2/content/en-us/videos/vizcast-{gamePk}
+  purpose: Game Vizcast video metadata; linked playbackScenarios location in Savant client.
+  source: Savant gamefeed-all.js; see SAVANT_AUDIT.md and savant_route_inventory.yaml
+  checked_on: '2026-11-09'
+  verification: called anonymously
+  probe:
+    url: https://dapi.mlbinfra.com/v2/content/en-us/videos/vizcast-716463
+    http_status: 404
+    content_type: application/problem+json; charset=utf-8
+    result: not found for historical game 716463
+  access: successful metadata access not established for tested historical game
+  notes: A 404 for a 2023 game does not establish current Vizcast coverage.
+- name: terra_location
+  method: GET
+  url_template: https://terra.mlb.com/
+  purpose: Request-location policy classification used for EU/media behavior; not baseball data.
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+  original_source_name: webpack:///./node_modules/bdvp-common/src/utils/getIsEU.js
+  checked_on: '2026-11-09'
+  verification: observed anonymous browser request, 200 JSON
+  response_fields:
+  - countryCode
+  - isCaribbean
+  - isEuropeanUnion
+  - isLatinAmerica
+  access: public in observed browser session
+  notes: Location values and browser identifiers not retained.
+source_manifest:
+- url: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  sha256: 7975624ee5d7a2e99e3d88fad3149debd346b1ae7b7d4df66b2f79568c3a1f4c
+  role: All Film Room GraphQL document definitions and local resolvers inspected
+- url: https://prod-gameday.mlbstatic.com/app-mlb/5.61.0-mlb.1/gd.min.js
+  sha256: f4f149833bbb4fc58730a0db366ae77e369d7150460ef0bb62d081601ef15fe6
+  role: Game-content and player-story GraphQL operation definitions inspected
+- url: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js.map
+  sha256: 6e3e3c9dd13130243c7d2757491c81580bc074967c2a2bd2ec2ab3f7abe46185
+  role: Publicly referenced source map; 2188 source entries; original Film Room query/mutation modules and local
+    network resolvers audited
+catalog_interpretation: Client operation variable declarations are taken from first-party documents; the separate
+  schema_root_interfaces and mlb_fastball_schema.json describe the introspected server schema. Server defaults and
+  client variable defaults are distinct. HTTP 200 GraphQL errors, HTTP errors, empty results, and source-only resolvers
+  are not interchangeable. Browser telemetry is excluded.
+search_field_metadata:
+- id: '1'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Play Id
+  name: PlayId
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '2'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Batter Name
+  name: BatterName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '3'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Batter Id
+  name: BatterId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '4'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Batter Side
+  name: BatterSide
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '5'
+  category: BATTER
+  defaultOperator: '>='
+  displayName: Exit Velocity
+  name: ExitVelocity
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '6'
+  category: BATTER
+  defaultOperator: '>='
+  displayName: Launch Angle
+  name: LaunchAngle
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: °
+    spanishValue: °
+- id: '7'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Detailed Hit Result
+  name: DetailedHitResult
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '8'
+  category: GAME
+  defaultOperator: '='
+  displayName: Game Pk
+  name: GamePk
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '9'
+  category: GAME
+  defaultOperator: '='
+  displayName: Season
+  name: Season
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '10'
+  category: GAME
+  defaultOperator: '='
+  displayName: Game Date
+  name: GameDate
+  type: DATE
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '11'
+  category: GAME
+  defaultOperator: '='
+  displayName: Venue Id
+  name: VenueId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '12'
+  category: GAME
+  defaultOperator: '='
+  displayName: Venue Name
+  name: VenueName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '13'
+  category: GAME
+  defaultOperator: '='
+  displayName: Home Team Id
+  name: HomeTeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '14'
+  category: GAME
+  defaultOperator: '='
+  displayName: Home Team Name
+  name: HomeTeamName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '15'
+  category: GAME
+  defaultOperator: '='
+  displayName: Away Team Id
+  name: AwayTeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '16'
+  category: GAME
+  defaultOperator: '='
+  displayName: Away Team Name
+  name: AwayTeamName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '17'
+  category: GAME
+  defaultOperator: '='
+  displayName: Game Type
+  name: GameType
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '18'
+  category: GAME
+  defaultOperator: '='
+  displayName: Day or Night
+  name: DayNight
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '19'
+  category: GAME
+  defaultOperator: '='
+  displayName: Inning
+  name: Inning
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '20'
+  category: GAME
+  defaultOperator: '='
+  displayName: Top or Bottom
+  name: TopBottom
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '21'
+  category: GAME
+  defaultOperator: '='
+  displayName: At Bat Number
+  name: AtBatNumber
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '22'
+  category: GAME
+  defaultOperator: '='
+  displayName: Outs
+  name: Outs
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '23'
+  category: GAME
+  defaultOperator: '='
+  displayName: Balls
+  name: Balls
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '24'
+  category: GAME
+  defaultOperator: '='
+  displayName: Strikes
+  name: Strikes
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '25'
+  category: PITCHER
+  defaultOperator: '>='
+  displayName: Pitch Speed
+  name: PitchSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '26'
+  category: PITCHER
+  defaultOperator: '>='
+  displayName: Spin Rate
+  name: SpinRate
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: rpm
+    spanishValue: rpm
+- id: '27'
+  category: PITCHER
+  defaultOperator: '>='
+  displayName: Plate X
+  name: PlateX
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '28'
+  category: PITCHER
+  defaultOperator: '>='
+  displayName: Plate Y
+  name: PlateY
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '29'
+  category: PITCHER
+  defaultOperator: '>='
+  displayName: Plate Z
+  name: PlateZ
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '30'
+  category: PITCHER
+  defaultOperator: '='
+  displayName: Pitch Type
+  name: PitchType
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '31'
+  category: PITCHER
+  defaultOperator: '='
+  displayName: Pitch Result
+  name: PitchResult
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '32'
+  category: PITCHER
+  defaultOperator: '='
+  displayName: Pitcher Id
+  name: PitcherId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '33'
+  category: PITCHER
+  defaultOperator: '='
+  displayName: Pitcher Name
+  name: PitcherName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '34'
+  category: PITCHER
+  defaultOperator: '='
+  displayName: Pitcher Hand
+  name: PitcherHand
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '35'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Play Tags
+  name: Tags
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '36'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Catcher Id
+  name: CatcherId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '37'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: First Baseman Id
+  name: FirstBasemanId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '38'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Second Baseman Id
+  name: SecondBasenameId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '39'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Third Baseman Id
+  name: ThirdBasemanId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '40'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Shortstop Id
+  name: ShortstopId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '41'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Left Fielder Id
+  name: LeftFielderId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '42'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Center Fielder Id
+  name: CenterFielderId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '43'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Right Fielder Id
+  name: RightFielderId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '44'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Catcher Name
+  name: CatcherName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '45'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: First Baseman Name
+  name: FirstBasemanName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '46'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Second Baseman Name
+  name: SecondBasemanName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '47'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Third Baseman Name
+  name: ThirdBasemanName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '48'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Shortstop Name
+  name: ShortstopName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '49'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Left Fielder Name
+  name: LeftFielderName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '50'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Center Fielder Name
+  name: CenterFielderName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '51'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Right Fielder Name
+  name: RightFielderName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '53'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Primary Fielder Id
+  name: PrimaryFielderId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '54'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Primary Fielder Name
+  name: PrimaryFielderName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '55'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Catch Probability
+  name: CatchProbability
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: '%'
+    spanishValue: '%'
+- id: '56'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Catch Rating
+  name: CatchRating
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement:
+    value: star(s)
+    spanishValue: estrella(s)
+- id: '59'
+  category: FIELDER
+  defaultOperator: <=
+  displayName: Pop Time (General)
+  name: PopTime
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '60'
+  category: FIELDER
+  defaultOperator: <=
+  displayName: Pop Time First Base
+  name: PopTimeFirstBase
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '61'
+  category: FIELDER
+  defaultOperator: <=
+  displayName: Pop Time Second Base
+  name: PopTimeSecondBase
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '62'
+  category: FIELDER
+  defaultOperator: <=
+  displayName: Pop Time Third Base
+  name: PopTimeThirdBase
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '71'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Description
+  name: Description
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '72'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Start Time
+  name: StartTime
+  type: DATETIME
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '73'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: End Time
+  name: EndTime
+  type: DATETIME
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '74'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Pitch Time
+  name: PitchTime
+  type: DATETIME
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '75'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Batter Sprint Speed
+  name: BatterSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft/sec
+    spanishValue: pies/seg
+- id: '76'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Batter Home to First
+  name: BatterHomeToFirst
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '77'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Batter Home to Second
+  name: BatterHomeToSecond
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '78'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Batter Home to Third
+  name: BatterHomeToThird
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '79'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Batter Home to Home
+  name: BatterHomeToHome
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '87'
+  category: RUNNER
+  defaultOperator: ==
+  displayName: Runner on Base
+  name: RunnerOnBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '92'
+  category: BATTER
+  defaultOperator: '>='
+  displayName: Hit Distance
+  name: HitDistance
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '93'
+  category: BATTER
+  defaultOperator: '>='
+  displayName: Projected Hit Distance
+  name: ProjectedHitDistance
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '94'
+  category: PLAYMETADATA
+  defaultOperator: '>='
+  displayName: Away Team WPA Delta
+  name: AwayTeamWPADelta
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '95'
+  category: PLAYMETADATA
+  defaultOperator: '>='
+  displayName: Home Team WPA Delta
+  name: HomeTeamWPADelta
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '96'
+  category: PLAYMETADATA
+  defaultOperator: '='
+  displayName: Absolute WPA Delta
+  name: AbsWpaDelta
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '97'
+  category: PLAYMETADATA
+  defaultOperator: '>='
+  displayName: Captivating Index
+  name: CaptivatingIndex
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '98'
+  category: PLAYMETADATA
+  defaultOperator: '>='
+  displayName: Wpa Based Captivating Index
+  name: WpaCaptivatingIndex
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '99'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Positions Id Where Fielder Out
+  name: PositionsPlayerOutOfPositionId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '100'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Positions Code Where Fielder Out
+  name: PositionsPlayerOutOfPositionCode
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '101'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Fielder Shift Classification
+  name: FieldersShift
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '102'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Hit Trajectory
+  name: HitTrajectory
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '103'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Primary Fielder Position Id
+  name: PrimaryFielderPosId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '104'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Primary Fielder Position Code
+  name: PrimaryFielderPosCode
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '105'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Assist Positions Id
+  name: AssistPositionsId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '106'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Assist Positions Code
+  name: AssistPositionsCode
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '107'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Involved Positions Id
+  name: InvolvedPositionsId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '108'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Involved Positions Code
+  name: InvolvedPositionsCode
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '113'
+  category: FIELDER
+  defaultOperator: '='
+  displayName: Wall Ball Classification
+  name: WallBallClassification
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '114'
+  category: GAME
+  defaultOperator: '='
+  displayName: Batting Team Id
+  name: BattingTeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '115'
+  category: GAME
+  defaultOperator: '='
+  displayName: Batting Team Name
+  name: BattingTeamName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '116'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pitching Team Id
+  name: PitchingTeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '117'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pitching Team Name
+  name: PitchingTeamName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '118'
+  category: GAME
+  defaultOperator: '='
+  displayName: Team name abbreviation for home team
+  name: HomeTeamNameAbbreviation
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '119'
+  category: GAME
+  defaultOperator: '='
+  displayName: Team name abbreviation for away team
+  name: AwayTeamNameAbbreviation
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '120'
+  category: GAME
+  defaultOperator: '='
+  displayName: Team name abbreviation for batting team
+  name: BattingTeamNameAbbreviation
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '121'
+  category: GAME
+  defaultOperator: '='
+  displayName: Team name abbreviation for pitching team
+  name: PitchingTeamNameAbbreviation
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '122'
+  category: GAME
+  defaultOperator: <=
+  displayName: Run Delta
+  name: AbsRunDelta
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: run(s)
+    spanishValue: carrera(s)
+- id: '123'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Hit Direction
+  name: HitDirection
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: °
+    spanishValue: °
+- id: '124'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Sprint Speed of the Runner on First
+  name: SprintSpeedRunnerOnFirst
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft/sec
+    spanishValue: pies/seg
+- id: '125'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Sprint Speed of the Runner on Second
+  name: SprintSpeedRunnerOnSecond
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft/sec
+    spanishValue: pies/seg
+- id: '126'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Sprint Speed of the Runner on Third
+  name: SprintSpeedRunnerOnThird
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft/sec
+    spanishValue: pies/seg
+- id: '127'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Primary Lead Distance of the Runner on First
+  name: PrimaryLeadRunnerOnFirst
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '128'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Primary Lead Distance of the Runner on Second
+  name: PrimaryLeadRunnerOnSecond
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '129'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Primary Lead Distance of the Runner on Third
+  name: PrimaryLeadRunnerOnThird
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '130'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Secondary Lead Distance of the Runner on First
+  name: SecondaryLeadRunnerOnFirst
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '131'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Secondary Lead Distance of the Runner on Second
+  name: SecondaryLeadRunnerOnSecond
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '132'
+  category: RUNNER
+  defaultOperator: '>='
+  displayName: Secondary Lead Distance of the Runner on Third
+  name: SecondaryLeadRunnerOnThird
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: ft
+    spanishValue: pies
+- id: '133'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Result of the Runner on First
+  name: ResultRunnerOnFirst
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '134'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Result of the Runner on Second
+  name: ResultRunnerOnSecond
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '135'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Result of the Runner on Third
+  name: ResultRunnerOnThird
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '136'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Base the Runner on First Ended Up On
+  name: PostRunnerOnFirstBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '137'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Base the Runner on Second Ended Up On
+  name: PostRunnerOnSecondBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '138'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Base the Runner on Third Ended Up On
+  name: PostRunnerThirdBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '139'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runner ID (on First Base)
+  name: CurrentRunnerIdFirstBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '140'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runner ID (on Second Base)
+  name: CurrentRunnerIdSecondBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '141'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runner ID (on Third Base)
+  name: CurrentRunnerIdThirdBase
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '142'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runner Name (on First Base)
+  name: CurrentRunnerNameFirstBase
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '143'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runner Name (on Second Base)
+  name: CurrentRunnerNameSecondBase
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '144'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runner Name (on Third Base)
+  name: CurrentRunnerNameThirdBase
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '145'
+  category: RUNNER
+  defaultOperator: '='
+  displayName: Runners Out At
+  name: RunnersOutAt
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '146'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Hit Distance Type
+  name: HitDistanceType
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '147'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Catcher Arm Strength (MPH)
+  name: CatcherArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '148'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: First Baseman Arm Strength (MPH)
+  name: FirstBasemanArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '149'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Second Baseman Arm Strength (MPH)
+  name: SecondBasemanArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '150'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Third Baseman Arm Strength (MPH)
+  name: ThirdBasemanArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '151'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Shortstop Arm Strength (MPH)
+  name: ShortstopArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '152'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Left Fielder Arm Strength (MPH)
+  name: LeftFielderArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '153'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Right Fielder Arm Strength (MPH)
+  name: RightFielderArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '154'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Center Fielder Arm Strength (MPH)
+  name: CenterFielderArmStrength
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '155'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Catcher Sprint Speed (MPH)
+  name: CatcherSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '156'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: First Baseman Sprint Speed (MPH)
+  name: FirstBasemanSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '157'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Second Baseman Sprint Speed (MPH)
+  name: SecondBasemanSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '158'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Third Baseman Sprint Speed (MPH)
+  name: ThirdBasemanSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '159'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Shortstop Sprint Speed (MPH)
+  name: ShortstopSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '160'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Left Fielder Sprint Speed (MPH)
+  name: LeftFielderSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '161'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Right Fielder Sprint Speed (MPH)
+  name: RightFielderSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '162'
+  category: FIELDER
+  defaultOperator: '>='
+  displayName: Center Fielder Sprint Speed (MPH)
+  name: CenterFielderSprintSpeed
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: mph
+    spanishValue: mph
+- id: '163'
+  category: GENERAL
+  defaultOperator: ==
+  displayName: Team
+  name: Team
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '164'
+  category: GENERAL
+  defaultOperator: ==
+  displayName: Team Id
+  name: TeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '165'
+  category: GENERAL
+  defaultOperator: ==
+  displayName: Player Id
+  name: PlayerId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '166'
+  category: GENERAL
+  defaultOperator: ==
+  displayName: Player
+  name: Player
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '167'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Timestamp
+  name: Timestamp
+  type: DATETIME
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '168'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Blurb
+  name: Blurb
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '169'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Tags
+  name: ContentTags
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '170'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Type
+  name: ContentType
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '171'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Description
+  name: ContentDescription
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '172'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Duration
+  name: ContentDuration
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: sec
+    spanishValue: seg
+- id: '173'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Id
+  name: ContentId
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '174'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Date
+  name: ContentDate
+  type: DATETIME
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '175'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Rank
+  name: Rank
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '176'
+  category: PITCHER
+  defaultOperator: '='
+  displayName: GameDay Pitch Zone
+  name: GameDayPitchZone
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '177'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Hit Result
+  name: HitResult
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '178'
+  category: GENERAL
+  defaultOperator: '>='
+  displayName: UpdatedAt
+  name: UpdatedAt
+  type: DATETIME
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '179'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Content Slug
+  name: Slug
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '180'
+  category: CONTENT
+  defaultOperator: '='
+  displayName: Language
+  name: Language
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '181'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Content Source Rank
+  name: ContentSourceRank
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '183'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Date
+  name: Date
+  type: DATE
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '184'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pitch Number
+  name: PitchNumber
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '185'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pre Home Team Runs
+  name: PreHomeTeamRuns
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '186'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pre Away Team Runs
+  name: PreAwayTeamRuns
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '187'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pre Home Team Hits
+  name: PreHomeTeamHits
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '188'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pre Away Team Hits
+  name: PreAwayTeamHits
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '189'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pre Home Team Errors
+  name: PreHomeTeamErrors
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '190'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pre Away Team Errors
+  name: PreAwayTeamErrors
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '191'
+  category: GAME
+  defaultOperator: '='
+  displayName: Post Home Team Runs
+  name: PostHomeTeamRuns
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '192'
+  category: GAME
+  defaultOperator: '='
+  displayName: Post Away Team Runs
+  name: PostAwayTeamRuns
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '193'
+  category: GAME
+  defaultOperator: '='
+  displayName: Post Home Team Hits
+  name: PostHomeTeamHits
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '194'
+  category: GAME
+  defaultOperator: '='
+  displayName: Post Away Team Hits
+  name: PostAwayTeamHits
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '195'
+  category: GAME
+  defaultOperator: '='
+  displayName: Post Home Team Errors
+  name: PostHomeTeamErrors
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '196'
+  category: GAME
+  defaultOperator: '='
+  displayName: Post Away Team Errors
+  name: PostAwayTeamErrors
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '197'
+  category: BATTER
+  defaultOperator: '='
+  displayName: Percent Tracked
+  name: PercentTracked
+  type: NUMBER
+  supportsDistinctValues: false
+  unitOfMeasurement:
+    value: '%'
+    spanishValue: '%'
+- id: '198'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Key Team
+  name: KeyTeam
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '199'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Key Team Id
+  name: KeyTeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '200'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Key Player Id
+  name: KeyPlayerId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '201'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Key Player
+  name: KeyPlayer
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '202'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Sport Id
+  name: SportId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '203'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Content Title
+  name: ContentTitle
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '204'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Content Blurb
+  name: ContentBlurb
+  type: STRING
+  supportsDistinctValues: false
+  unitOfMeasurement: null
+- id: '307'
+  category: GENERAL
+  defaultOperator: '='
+  displayName: Document Type
+  name: IdType
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '310'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pitch Call
+  name: PitchCall
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '319'
+  category: GAME
+  defaultOperator: '='
+  displayName: Home Team Parent Team Id
+  name: HomeTeamParentId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '320'
+  category: GAME
+  defaultOperator: '='
+  displayName: Home Team Parent Team Name
+  name: HomeTeamParentName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '321'
+  category: GAME
+  defaultOperator: '='
+  displayName: Away Team Parent Team Id
+  name: AwayTeamParentId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '322'
+  category: GAME
+  defaultOperator: '='
+  displayName: Away Team Parent Team Name
+  name: AwayTeamParentName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '323'
+  category: GAME
+  defaultOperator: '='
+  displayName: Batting Team Parent Team Id
+  name: BattingTeamParentId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '324'
+  category: GAME
+  defaultOperator: '='
+  displayName: Batting Team Parent Team Name
+  name: BattingTeamParentName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '325'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pitching Team Parent Team Id
+  name: PitchingTeamParentId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '326'
+  category: GAME
+  defaultOperator: '='
+  displayName: Pitching Team Parent Team Name
+  name: PitchingTeamParentName
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '327'
+  category: REVIEW
+  defaultOperator: '='
+  displayName: Review Type
+  name: ReviewType
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '328'
+  category: REVIEW
+  defaultOperator: '='
+  displayName: Review State
+  name: ReviewState
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '329'
+  category: REVIEW
+  defaultOperator: '='
+  displayName: Initiating Team Id
+  name: ReviewInitiatingTeamId
+  type: NUMBER
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '330'
+  category: REVIEW
+  defaultOperator: '='
+  displayName: Is Review In Progress
+  name: ReviewInProgress
+  type: BOOLEAN
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '331'
+  category: REVIEW
+  defaultOperator: '='
+  displayName: Is Review Overturned
+  name: ReviewOverturned
+  type: BOOLEAN
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+- id: '334'
+  category: REVIEW
+  defaultOperator: '='
+  displayName: Initiating Team Role
+  name: ReviewInitiatingTeamRole
+  type: STRING
+  supportsDistinctValues: true
+  unitOfMeasurement: null
+fragment_definitions:
+- name: MediaPlaybackFields
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2597140
+  document: |
+    fragment MediaPlaybackFields on MediaPlayback {
+        id
+        slug
+        title
+        blurb
+        description
+        date
+        canAddToReel
+        feeds {
+            type
+            duration
+            closedCaptions
+            playbacks {
+                name
+                url
+                mimetype
+                segments @include(if: $withPlaybacksSegments)
+            }
+            image {
+                altText
+                templateUrl
+                cuts {
+                    aspectRatio
+                    width
+                    height
+                    src
+                }
+            }
+        }
+        keywordsDisplay {
+            slug
+            displayName
+        }
+        isInReel @client
+        translationId
+        playInfo {
+            isSinglePlay
+            balls
+            strikes
+            outs
+            inning
+            inningHalf
+            pitchSpeed
+            pitchType
+            exitVelocity
+            hitDistance
+            launchAngle
+            spinRate
+            scoreDifferential
+            gamePk
+            runners {
+                first
+                second
+                third
+            }
+            teams {
+                away {
+                    name
+                    shortName
+                    triCode
+                }
+                home {
+                    name
+                    shortName
+                    triCode
+                }
+                batting {
+                    name
+                    shortName
+                    triCode
+                }
+                pitching {
+                    name
+                    shortName
+                    triCode
+                }
+            }
+            players {
+                pitcher {
+                    id
+                    name
+                    lastName
+                    playerHand
+                }
+                batter {
+                    id
+                    name
+                    lastName
+                    playerHand
+                }
+            }
+        }
+    }
+  classification: source-defined GraphQL fragment; not a request by itself
+  transport_note: Remove the local isInReel @client selection before server transport.
+- name: MediaPlaybackShare
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2599379
+  document: |
+    fragment MediaPlaybackShare on MediaPlayback {
+        slug
+        title
+        blurb
+        description
+        feeds {
+            type
+            image {
+                cuts {
+                    src
+                }
+            }
+        }
+    }
+  classification: source-defined GraphQL fragment; not a request by itself
+  transport_note: No client-only selection found in this fragment.
+- name: CoreSearchFieldMetadata
+  source: https://builds.mlbstatic.com/mlb.com/sections/video/builds/3f19968e7502c244bf346238f2fbab4907a655a0_1788358291/scripts/build/index.bundle.js
+  source_character_offset: 2599706
+  document: |
+    fragment CoreSearchFieldMetadata on SearchFieldMetadata {
+        id
+        category
+        description
+        defaultOperator
+        displayName
+        display
+        helperText
+        name
+        type
+        supportsDistinctValues
+        range {
+            min
+            max
+        }
+        unitOfMeasurement {
+            value
+            spanishValue
+        }
+    }
+  classification: source-defined GraphQL fragment; not a request by itself
+  transport_note: No client-only selection found in this fragment.
+document_interpretation: Source-defined GraphQL documents and fragment definitions are retained as declarative interface
+  metadata. They describe selected fields and variable declarations used by this client version, not the complete
+  server schema. Fields or fragments marked @client are Apollo local cache selections; remove them before server
+  transport. Fragment definitions must be appended exactly once. Source-only mutation documents were not executed.
+schema_root_interfaces:
+- field: fields
+  operation_type: query
+  return_type: '[SearchFieldMetadata]'
+  arguments:
+    ids:
+      type: '[Int]'
+      default_value_graphql: null
+      description: null
+    searchType:
+      type: SearchType
+      default_value_graphql: UNIFIED
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: types
+  operation_type: query
+  return_type: '[SearchFieldTypeMetadata]'
+  arguments: {}
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: commonFields
+  operation_type: query
+  return_type: '[SearchFieldValue]'
+  arguments:
+    plays:
+      type: '[String]!'
+      default_value_graphql: null
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: search
+  operation_type: query
+  return_type: PagedClipDetails
+  arguments:
+    query:
+      type: String!
+      default_value_graphql: null
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '10'
+      description: null
+    page:
+      type: Int
+      default_value_graphql: '0'
+      description: null
+    feedPreference:
+      type: FeedPreference
+      default_value_graphql: CMS
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    searchType:
+      type: SearchType
+      default_value_graphql: UNIFIED
+      description: null
+    contentPreference:
+      type: ContentPreference
+      default_value_graphql: CMS_FIRST
+      description: null
+    contentGroup:
+      type: ContentGroup
+      default_value_graphql: DEFAULT
+      description: null
+    queryType:
+      type: QueryType
+      default_value_graphql: STRUCTURED
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: queryInfo
+  operation_type: query
+  return_type: '[InfoResponse]'
+  arguments:
+    queries:
+      type: '[String]'
+      default_value_graphql: null
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    queryType:
+      type: QueryType
+      default_value_graphql: STRUCTURED
+      description: null
+    includeCount:
+      type: Boolean
+      default_value_graphql: 'false'
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: mediaPlayback
+  operation_type: query
+  return_type: '[MediaPlayback]'
+  arguments:
+    ids:
+      type: '[String]'
+      default_value_graphql: null
+      description: null
+    idType:
+      type: MediaPlaybackIdType
+      default_value_graphql: SLUG
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    contentGroup:
+      type: ContentGroup
+      default_value_graphql: DEFAULT
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: people
+  operation_type: query
+  return_type: '[PlayerInfo]'
+  arguments:
+    ids:
+      type: '[Int]'
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: teams
+  operation_type: query
+  return_type: '[TeamInfo]'
+  arguments:
+    ids:
+      type: '[Int]'
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: topicPlayList
+  operation_type: query
+  return_type: TopicPlayList
+  arguments:
+    topicId:
+      type: String
+      default_value_graphql: '"most-popular"'
+      description: null
+    contentGroup:
+      type: ContentGroup
+      default_value_graphql: EXPERIENCE_A
+      description: null
+    videoSlug:
+      type: String
+      default_value_graphql: null
+      description: null
+    videoTranslationId:
+      type: String
+      default_value_graphql: null
+      description: null
+    teamId:
+      type: Int
+      default_value_graphql: null
+      description: null
+    adobeId:
+      type: String
+      default_value_graphql: null
+      description: null
+    sessionId:
+      type: String
+      default_value_graphql: null
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '20'
+      description: null
+    page:
+      type: Int
+      default_value_graphql: '0'
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: getReels
+  operation_type: query
+  return_type: PagedReelResponse
+  arguments:
+    userId:
+      type: String
+      default_value_graphql: null
+      description: null
+    orderBy:
+      type: OrderBy
+      default_value_graphql: CREATED_AT
+      description: null
+    orderDirection:
+      type: OrderDirection
+      default_value_graphql: DESC
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '10'
+      description: null
+    page:
+      type: Int
+      default_value_graphql: '0'
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: getReelBySlug
+  operation_type: query
+  return_type: ReelResponse
+  arguments:
+    slug:
+      type: String!
+      default_value_graphql: null
+      description: null
+    userId:
+      type: String
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: validateReel
+  operation_type: query
+  return_type: ReelValidationResponse
+  arguments:
+    reelRequest:
+      type: ReelInput!
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: userInfo
+  operation_type: query
+  return_type: UserInfo
+  arguments:
+    userId:
+      type: String!
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: contentTagDisplayValues
+  operation_type: query
+  return_type: '[KeywordDisplay]'
+  arguments:
+    contentTags:
+      type: '[String!]'
+      default_value_graphql: null
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: games
+  operation_type: query
+  return_type: '[Game]'
+  arguments:
+    ids:
+      type: '[Int]'
+      default_value_graphql: null
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: suggestedSearches
+  operation_type: query
+  return_type: '[String]'
+  arguments:
+    total:
+      type: Int
+      default_value_graphql: '6'
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: suggestedStories
+  operation_type: query
+  return_type: '[StoryPreview]'
+  arguments:
+    searchType:
+      type: StoriesSearchType!
+      default_value_graphql: null
+      description: null
+    search:
+      type: String!
+      default_value_graphql: null
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '10'
+      description: null
+    skip:
+      type: Int
+      default_value_graphql: '0'
+      description: null
+    preview:
+      type: Boolean
+      default_value_graphql: 'false'
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: story
+  operation_type: query
+  return_type: Story
+  arguments:
+    search:
+      type: String!
+      default_value_graphql: null
+      description: null
+    searchType:
+      type: StorySearchType!
+      default_value_graphql: null
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '10'
+      description: null
+    preview:
+      type: Boolean
+      default_value_graphql: 'false'
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: userStory
+  operation_type: query
+  return_type: Story
+  arguments:
+    userId:
+      type: String
+      default_value_graphql: null
+      description: null
+    experienceType:
+      type: String
+      default_value_graphql: '"my_daily_story"'
+      description: null
+    startDate:
+      type: String!
+      default_value_graphql: null
+      description: null
+    endDate:
+      type: String
+      default_value_graphql: null
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '20'
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: playerStory
+  operation_type: query
+  return_type: Story
+  arguments:
+    playerId:
+      type: Int!
+      default_value_graphql: null
+      description: null
+    experience:
+      type: PlayerStoryExperience
+      default_value_graphql: null
+      description: null
+    experienceType:
+      type: String
+      default_value_graphql: null
+      description: TODO - remove this once clients cut over to experienceType
+    startDate:
+      type: String
+      default_value_graphql: null
+      description: null
+    endDate:
+      type: String
+      default_value_graphql: null
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '20'
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: playerStories
+  operation_type: query
+  return_type: '[Story]'
+  arguments:
+    playerIds:
+      type: '[Int]!'
+      default_value_graphql: null
+      description: null
+    experience:
+      type: PlayerStoryExperience
+      default_value_graphql: null
+      description: null
+    experienceType:
+      type: String
+      default_value_graphql: null
+      description: TODO - remove this once clients cut over to experienceType
+    startDate:
+      type: String
+      default_value_graphql: null
+      description: null
+    endDate:
+      type: String
+      default_value_graphql: null
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '20'
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: userSuggestions
+  operation_type: query
+  return_type: '[MediaPlayback]'
+  arguments:
+    userId:
+      type: String
+      default_value_graphql: '"anonymous"'
+      description: null
+    userLocation:
+      type: UserLocation!
+      default_value_graphql: null
+      description: null
+    experience:
+      type: String
+      default_value_graphql: '"VIDEO_MULTIPLE_PREFERENCES"'
+      description: null
+    languagePreference:
+      type: LanguagePreference
+      default_value_graphql: EN
+      description: null
+    forgeInstance:
+      type: ForgeType
+      default_value_graphql: MLB
+      description: null
+    limit:
+      type: Int
+      default_value_graphql: '5'
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: containers
+  operation_type: query
+  return_type: ContainerResponse
+  arguments:
+    ids:
+      type: '[String]'
+      default_value_graphql: null
+      description: null
+    idType:
+      type: CriterionIdType
+      default_value_graphql: null
+      description: null
+  description: Criterion queries
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: sections
+  operation_type: query
+  return_type: SectionResponse
+  arguments:
+    ids:
+      type: '[Int]'
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: sectionTypes
+  operation_type: query
+  return_type: SectionTypeResponse
+  arguments:
+    ids:
+      type: '[Int]'
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: sectionTypeFields
+  operation_type: query
+  return_type: SectionTypeFieldResponse
+  arguments:
+    sectionTypeId:
+      type: Int!
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: false
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+- field: addReel
+  operation_type: mutation
+  return_type: ReelResponse
+  arguments:
+    reelRequest:
+      type: ReelInput!
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+  execution: not executed
+- field: deleteReel
+  operation_type: mutation
+  return_type: DeleteReelResponse
+  arguments:
+    reelId:
+      type: String!
+      default_value_graphql: null
+      description: null
+  description: null
+  deprecated: false
+  deprecation_reason: null
+  source: mlb_fastball_schema.json
+  discovery: anonymous standard GraphQL introspection
+  checked_on: '2026-11-09'
+  referenced_by_inspected_client_document: true
+  verification: schema metadata confirmed; data behavior/access must be evaluated separately
+  execution: not executed
+schema_checks:
+- endpoint: https://fastball-gateway.mlb.com/graphql
+  method: POST
+  operation_type: query
+  operation_name: IntrospectionQuery
+  checked_on: '2026-11-09'
+  http_status: 200
+  result: standard schema introspection available anonymously
+  snapshot: mlb_fastball_schema.json
+  snapshot_sha256: ec81b107815560cc2ee0606b83dfcdab4808c30f7ac440b6cead65e1f1b01a21
+  query_root_fields: 26
+  mutation_root_fields: 2
+  subscription_root: null
+  types: 107
+  note: Snapshot includes type fields, nested type references, arguments/defaults, input objects, enum values, directives
+    and deprecation metadata. This describes exposed schema, not resolver authorization or every internal service.
+- endpoint: https://data-graph.mlb.com/graphql
+  method: POST
+  operation_type: query
+  operation_name: IntrospectionQuery
+  checked_on: '2026-11-09'
+  http_status: 200
+  result: 'GraphQL error: introspection has been disabled'
+  graphql_error_code: INTROSPECTION_DISABLED
+  followup: Stopped schema introspection; source-defined operations remain documented.
+- endpoint: https://graphql.cms.mlbinfra.com/graphql
+  method: POST
+  operation_type: query
+  operation_name: IntrospectionQuery
+  checked_on: '2026-11-09'
+  http_status: null
+  result: DNS resolution failed for configured hostname; no HTTP response
+  followup: No schema obtained; availability/authentication unestablished, not evidence of a nonexistent service.

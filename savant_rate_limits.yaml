@@ -1,5 +1,6 @@
 # Baseball Savant Rate Limits & Usage Guidelines
 # Note: MLB publishes NO official rate limit figures.
+# Inherited historical claims, not revalidated official limits.
 # These are empirically observed limits documented by the community
 # (pybaseball, sabRmetrics, baseballr, abdwr3edata) and general best practices.
 
@@ -7,7 +8,7 @@ rate_limits:
   statcast_search_csv:
     rows_per_query:
       value: "25,000-40,000"
-      note: "Varies over time. Most recent consensus ~25,000-30,000 rows per query."
+      note: "Varies over time. Historical reports often cite ~25,000-30,000 rows per query; current limit unverified."
       observed_by:
         - sabRmetrics → 25,000 rows
         - abdwr3edata → 25,000 rows
@@ -20,12 +21,12 @@ rate_limits:
       full_season_pitch_data: "Chunk by day (daily loop) - ~4,500 pitches/day in a typical regular season"
       weekly_data: "Exceeds limit (~30,000+ pitches/week) - chunk by day or 2 days"
       safe_default: "5 days or fewer for pitch-level queries"
-    mitigation: "If your query returns EXACTLY the row limit, you have more data and must split into smaller date ranges."
-    detection: "A result set of exactly N rows (the limit) indicates truncation."
+    mitigation: "A result at a suspected row cap may be truncated; split the query and compare results."
+    detection: "Exactly N rows is a warning sign, not proof of truncation."
 
   leaderboards:
     rows_per_query: "No documented limit (full season leaderboard returned)"
-    note: "Leaderboards return complete season data. ~200-600 rows for qualified players."
+    note: "Coverage and CSV support vary by board; completeness not established."
 
   request_throttling:
     no_published_rate_limit: true
@@ -58,7 +59,7 @@ error_codes:
     common_cause: "Query too complex/wide - split into smaller date ranges"
   "403":
     description: "Forbidden (rare)"
-    common_cause: "IP blocked for aggressive scraping"
+    common_cause: "Possible access restriction, authentication requirement, or automated-traffic policy; inspect response."
 
 sources:
   - name: pybaseball

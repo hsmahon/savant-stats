@@ -1,0 +1,88 @@
+reviewed_on: '2026-11-09'
+evidence: ENDPOINT_RESEARCH.md
+services:
+- name: cms_graphql
+  url: https://graphql.cms.mlbinfra.com/graphql
+  kind: application-configured service
+  discovered_on: '2026-11-09'
+  source: https://www.mlb.com/video
+  configuration_key: cms_graphql
+  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
+    verified.
+  access: unknown
+- name: data_graph
+  url: https://data-graph.mlb.com/graphql
+  kind: application-configured service
+  discovered_on: '2026-11-09'
+  source: https://www.mlb.com/video
+  configuration_key: data_graph
+  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
+    verified.
+  access: unknown
+- name: content_service
+  url: https://content-service.mlb.com
+  kind: application-configured service
+  discovered_on: '2026-11-09'
+  source: https://www.mlb.com/video
+  configuration_key: graphql_service
+  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
+    verified.
+  access: unknown
+- name: fastball_gateway
+  url: https://fastball-gateway.mlb.com
+  kind: application-configured service
+  discovered_on: '2026-11-09'
+  source: https://www.mlb.com/video
+  configuration_key: server
+  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
+    verified.
+  access: unknown
+- name: video_typeahead
+  url: https://typeahead.mlb.com/api/v1/typeahead/suggestions/
+  kind: application-configured service
+  discovered_on: '2026-11-09'
+  source: https://www.mlb.com/video
+  configuration_key: suggestionsEndpoint
+  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
+    verified.
+  access: unknown
+- name: sporty_clip
+  url_template: https://sporty-clips.mlb.com/{opaque_asset}.mp4
+  method: HEAD (verified); GET for playback
+  kind: MP4 media resource
+  discovered_on: '2026-11-09'
+  source: https://baseballsavant.mlb.com/sporty-videos
+  verification: Real play viewer returned a source URL; HEAD returned 200 video/mp4.
+  access: public for tested asset
+  notes: Use the returned URL; opaque asset names cannot be derived from a play UUID.
+- name: highlight_playback
+  url_template: https://mlb-cuts-diamond.mlb.com/{returned_asset_path}
+  method: GET
+  kind: MP4 or HLS resource returned by game content
+  source: https://statsapi.mlb.com/api/v1/game/716463/content
+  discovered_on: '2026-11-09'
+  verification: 'Returned HLS master playlist fetched: 200 application/vnd.apple.mpegurl and #EXTM3U. Segments and
+    all variants not downloaded.'
+  access: public for tested playlist
+  notes: Read playbacks[].url rather than synthesizing CDN paths; a CDN host does not identify the underlying storage
+    bucket.
+- name: statsapi_documentation
+  url: https://docs.statsapi.mlb.com
+  kind: documentation application
+  source: https://statsapi.mlb.com/docs/game/swagger.json
+  discovered_on: '2026-11-09'
+  verification: Legacy URL redirected here; 200 HTML Docusaurus shell. Linked client bundle applies an Okta authentication
+    wrapper to non-login routes. No JSON specification verified.
+  access: Public HTML shell; documentation UI authentication gate observed in client code.
+- name: statsapi_public_openapi
+  url: https://statsapi.mlb.com/v3/api-docs
+  kind: OpenAPI JSON specification
+  discovered_on: '2026-11-09'
+  verification: 200 JSON; same200paths/533schemas as documentation snapshot, with description differences. See STATSAPI_AUDIT.md.
+  access: public for tested request
+expanded_reference:
+  audit: MEDIA_AUDIT.md
+  inventory: mlb_media_operations.yaml
+  note: This hostname inventory records the initial discovery. The operation inventory contains subsequent concrete
+    query tests and current results.
+  schema: mlb_fastball_schema.json

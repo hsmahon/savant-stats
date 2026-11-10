@@ -1,9 +1,17 @@
 # Baseball Savant Leaderboards Catalog
 # Base URL: https://baseballsavant.mlb.com/leaderboard/{type}
-# Pattern: ?year=2025&type=batter&team=&min=q&csv=true
 # Note: Path segments marked with NESTED are sub-paths (e.g. bat-tracking/swing-timing-miss-distance)
 
+catalog_status: "Inherited availability dates and CSV options are not comprehensively verified; new discoveries are marked per entry."
+
 leaderboards:
+  first_base_receiving:
+    path: first-base-scoops-receiving
+    display_name: First Base Receiving
+    category: Fielding
+    format: HTML application; CSV support not checked
+    source: https://baseballsavant.mlb.com/sporty-videos
+    discovery: First-party navigation link observed 2026-11-09; data request not probed.
   expected_statistics:
     path: expected_statistics
     display_name: Expected Statistics
