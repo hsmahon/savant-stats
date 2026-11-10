@@ -19,4 +19,4 @@ Use this page to find the endpoint inventories. The linked YAML/JSON catalogs ar
 - `source_discovered` means a route or operation appeared in first-party client code. It does not prove that the route is current, anonymous, or data-bearing.
 - `verified` describes the recorded request and date only. Errors, empty payloads, and authentication responses are retained as observations, not universal availability claims.
 
-The inventories cover their recorded source sets; they do not claim to enumerate every private, authenticated, dynamic, or unpublished MLB service. For MLB's reported storage and distribution architecture, see the diagrams and dated source notes in [README.md](README.md).
+The inventories cover their recorded source sets; they do not claim to enumerate every private, authenticated, dynamic, or unpublished MLB service. For MLB's reported storage and distribution architecture, see [README.md](README.md); for the bounded November 10, 2026 public evidence and artifact hashes, see [MLB_PUBLIC_DATA_EVIDENCE.md](MLB_PUBLIC_DATA_EVIDENCE.md).
