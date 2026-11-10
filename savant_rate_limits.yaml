@@ -1,79 +1,58 @@
-# Baseball Savant Rate Limits & Usage Guidelines
-# Note: MLB publishes NO official rate limit figures.
-# Inherited historical claims, not revalidated official limits.
-# These are empirically observed limits documented by the community
-# (pybaseball, sabRmetrics, baseballr, abdwr3edata) and general best practices.
+# Request limits and retrieval guidance for Baseball Savant and the MLB Stats API.
+# Reviewed 2026-11-09 against current first-party documentation.
 
-rate_limits:
+reviewed: "2026-11-09"
+
+baseball_savant:
   statcast_search_csv:
-    rows_per_query:
-      value: "25,000-40,000"
-      note: "Varies over time. Historical reports often cite ~25,000-30,000 rows per query; current limit unverified."
-      observed_by:
-        - sabRmetrics → 25,000 rows
-        - abdwr3edata → 25,000 rows
-        - pybaseball → 30,000 rows (breaks >5 day requests into chunks)
-        - Bill Petti (baseballr) → ~40,000 rows or one week of games
-    timeout:
-      value: "30+ seconds"
-      note: "Complex queries (wide date ranges, many players) may time out with HTTP 504."
-    date_range_guidance:
-      full_season_pitch_data: "Chunk by day (daily loop) - ~4,500 pitches/day in a typical regular season"
-      weekly_data: "Exceeds limit (~30,000+ pitches/week) - chunk by day or 2 days"
-      safe_default: "5 days or fewer for pitch-level queries"
-    mitigation: "A result at a suspected row cap may be truncated; split the query and compare results."
-    detection: "Exactly N rows is a warning sign, not proof of truncation."
-
-  leaderboards:
-    rows_per_query: "No documented limit (full season leaderboard returned)"
-    note: "Coverage and CSV support vary by board; completeness not established."
-
-  request_throttling:
-    no_published_rate_limit: true
+    official_documentation:
+      url: "https://baseballsavant.mlb.com/csv-docs"
+      documents: "CSV field definitions and data meanings; no request-rate or response-row cap is stated."
+    limits:
+      requests_per_second: "not published in the reviewed first-party docs"
+      rows_per_response: "not published in the reviewed first-party docs"
+      timeout: "not published in the reviewed first-party docs"
+    this_repository_observations:
+      request_rate_limit_tested: false
+      maximum_response_rows_tested: false
+      date: "2026-11-09"
     guidance:
-      - "No official requests-per-second limit."
-      - "Be respectful - do not hammer the API."
-      - "Add delays (1-2s) between bulk requests."
-      - "Cache results locally to avoid re-downloading."
+      - "Use date/player/team filters to keep requests bounded and make results easier to verify."
+      - "If a response appears incomplete or a request fails, narrow the query and compare the resulting partitions; do not assume a particular cap or error cause."
+      - "Cache repeated results and avoid unnecessary parallel or burst requests. These are conservative client practices, not MLB-published limits."
 
-  gamefeed:
-    note: "Real-time endpoint - avoid polling more than once every few minutes."
+  historical_community_reports:
+    status: "Not treated as current platform limits or validated by this repository."
+    notes:
+      - "Older third-party libraries and articles report different CSV row caps (commonly 25,000, 30,000, or about 40,000) and different date chunk sizes. These reports conflict and may describe different dates or queries."
+      - "Do not infer truncation solely because a response has a particular row count; compare filtered partitions or verify against an independent count."
 
-general_best_practices:
-  - "Start with the narrowest date range that answers your question."
-  - "Use player/team filters to reduce result size."
-  - "For full seasons of pitch data, loop day-by-day and concatenate."
-  - "Handle HTTP 504 by retrying with smaller chunks or backoff."
-  - "Import DATA FROM A THIRD PARTY (FanGraphs, SportRadar) if you need commercial-scale guarantees."
-  - "Respect MLBAM terms of use - this data is property of MLB Advanced Media."
+mlb_stats_api:
+  official_documentation:
+    url: "https://docs.statsapi.mlb.com/getting-started/rate-limiting"
+    checked: "2026-11-09"
+    stated_policy:
+      requests_per_second: 25
+      window: "per second"
+      over_limit_status: 429
+      details: "Only requests exceeding the rate return 429. The documented limit is evaluated per second; later seconds allow requests again. The page does not specify a client-specific quota or a separate endpoint-family allowance."
+  repository_observations:
+    coverage: "Selected read-only routes and bounded requests; not a rate-limit stress test."
+    tested_requests_per_second: false
+    date: "2026-11-09"
+  guidance:
+    - "Keep request bursts at or below the documented 25-per-second limit."
+    - "If HTTP 429 is returned, reduce the request rate before retrying."
+    - "Do not interpret 401, 403, 500, 503, or 504 as rate-limit signals without response-specific evidence."
 
-error_codes:
-  "500":
-    description: "Internal server error"
-    common_cause: "Malformed request, deprecated parameter, invalid search syntax"
-  "503":
-    description: "Service unavailable"
-    common_cause: "Server overload, try again later"
-  "504":
-    description: "Gateway timeout"
-    common_cause: "Query too complex/wide - split into smaller date ranges"
-  "403":
-    description: "Forbidden (rare)"
-    common_cause: "Possible access restriction, authentication requirement, or automated-traffic policy; inspect response."
+scope:
+  - "The Savant and Stats API limits are separate; the Stats API's documented limit must not be attributed to Baseball Savant."
+  - "This file records published policy and bounded observations, not guarantees of availability, completeness, or commercial-use rights."
 
 sources:
-  - name: pybaseball
-    url: "https://github.com/jldbc/pybaseball/blob/master/docs/statcast.md"
-    limit_claim: "30,000 rows per query; requests >5 days split into chunks"
-  - name: sabRmetrics
-    url: "https://saberpowers.github.io/sabRmetrics/reference/download_baseballsavant.html"
-    limit_claim: "25,000 rows per query"
-  - name: abdwr3edata (Analyzing Baseball Data with R)
-    url: "https://beanumber.github.io/abdwr3edata/reference/statcast_daily.html"
-    limit_claim: "25,000 rows per query; ~4,500 pitches/day; weekly exceeds limit"
-  - name: Bill Petti / baseballr
-    url: "http://billpetti.github.io/2020-05-26-build-statcast-database-rstats-version-2.0/"
-    limit_claim: "~40,000 rows, or one week of games"
-  - name: MLB Statcast 2020 launch
-    url: "https://technology.mlblogs.com/introducing-statcast-2020-hawk-eye-and-google-cloud-a5f5c20321b8"
-    note: "Statcast data delivered to partners in under 250ms; Hawk-Eye + Google Cloud infrastructure"
+  - name: "Baseball Savant Statcast Search CSV documentation"
+    url: "https://baseballsavant.mlb.com/csv-docs"
+    supports: "CSV field definitions; no rate or row cap identified in the reviewed document."
+  - name: "MLB Stats API Rate Limiting documentation"
+    url: "https://docs.statsapi.mlb.com/getting-started/rate-limiting"
+    supports: "25 requests per second and HTTP 429 behavior for excess requests."

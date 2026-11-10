@@ -33,7 +33,7 @@ The [private-service access report](PRIVATE_MLB_SERVICES.md) explains which serv
 | [Leaderboards](savant_leaderboards.yaml) | Leaderboard paths, parameters and inherited field metadata |
 | [CSV fields](baseballsavant_csv_fields.yaml) | Search parameters and aggregate-output field reference |
 | [Game status](statsapi_game_status.yaml) | Game status code reference |
-| [Usage guidance](savant_rate_limits.yaml) | Historical community reports and conservative request guidance |
+| [Request limits](savant_rate_limits.yaml) | Current official Stats API rate policy; Savant limits not published in reviewed docs; historical community reports separated |
 
 ## What was verified
 
@@ -47,7 +47,7 @@ The public game-content API exposes archive feed identifiers, and the correspond
 
 Each newly verified route records its check date, response type and evidence reference. Entries without verification are inherited references or explicitly marked discovery leads. An HTML application, JSON endpoint, video resource and internal storage component are different kinds of surface. Hostnames found in application configuration are leads until an actual operation is verified.
 
-The concise catalogs do not replace the captured official Stats API specification. Inherited field lists, leaderboard availability dates, query options and usage-limit reports have not all been revalidated. The CSV field list describes an aggregate search context and should not be treated as the complete pitch-level Statcast schema; consult MLB's [CSV documentation](https://baseballsavant.mlb.com/csv-docs).
+The concise catalogs do not replace the captured official Stats API specification. Inherited field lists, leaderboard availability dates and query options have not all been revalidated. Request-limit status and evidence are recorded separately in [savant_rate_limits.yaml](savant_rate_limits.yaml). The CSV field list describes an aggregate search context and should not be treated as the complete pitch-level Statcast schema; consult MLB's [CSV documentation](https://baseballsavant.mlb.com/csv-docs).
 
 MLB's engineering articles describe PostgreSQL, Bigtable, Cloud Storage and BigQuery at different dates. The [architecture reference](MLB_DATA_ARCHITECTURE.md) separates those historical accounts from observed public responses and identifies unresolved questions.
 
