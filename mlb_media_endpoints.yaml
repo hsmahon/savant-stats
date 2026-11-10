@@ -1,5 +1,5 @@
 reviewed_on: '2026-11-09'
-evidence: ENDPOINT_RESEARCH.md
+evidence: mlb_media_operations.yaml
 services:
 - name: cms_graphql
   url: https://graphql.cms.mlbinfra.com/graphql
@@ -7,45 +7,40 @@ services:
   discovered_on: '2026-11-09'
   source: https://www.mlb.com/video
   configuration_key: cms_graphql
-  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
-    verified.
-  access: unknown
+  verification: Hostname/path present in first-party HTML configuration; no concrete CMS operation or schema was obtained.
+  access: unresolved
 - name: data_graph
   url: https://data-graph.mlb.com/graphql
   kind: application-configured service
   discovered_on: '2026-11-09'
   source: https://www.mlb.com/video
   configuration_key: data_graph
-  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
-    verified.
-  access: unknown
+  verification: Introspection returned INTROSPECTION_DISABLED; the source-defined getGamesByGamePks query returned JSON for the tested game. See mlb_media_operations.yaml.
+  access: public for tested query; schema unavailable by introspection
 - name: content_service
   url: https://content-service.mlb.com
   kind: application-configured service
   discovered_on: '2026-11-09'
   source: https://www.mlb.com/video
   configuration_key: graphql_service
-  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
-    verified.
-  access: unknown
+  verification: Hostname/path present in first-party HTML configuration; no concrete Content Service operation was identified.
+  access: unresolved
 - name: fastball_gateway
   url: https://fastball-gateway.mlb.com
   kind: application-configured service
   discovered_on: '2026-11-09'
   source: https://www.mlb.com/video
   configuration_key: server
-  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
-    verified.
-  access: unknown
+  verification: Anonymous GraphQL introspection returned the Fastball schema; operation results and access checks are in mlb_media_operations.yaml.
+  access: public schema; resolver access varies
 - name: video_typeahead
   url: https://typeahead.mlb.com/api/v1/typeahead/suggestions/
   kind: application-configured service
   discovered_on: '2026-11-09'
   source: https://www.mlb.com/video
   configuration_key: suggestionsEndpoint
-  verification: Hostname/path present in first-party HTML configuration; operations, schema and authentication not
-    verified.
-  access: unknown
+  verification: Anonymous typeahead request returned player suggestions; see mlb_media_operations.yaml.
+  access: public for tested request
 - name: sporty_clip
   url_template: https://sporty-clips.mlb.com/{opaque_asset}.mp4
   method: HEAD (verified); GET for playback
@@ -78,10 +73,49 @@ services:
   url: https://statsapi.mlb.com/v3/api-docs
   kind: OpenAPI JSON specification
   discovered_on: '2026-11-09'
-  verification: 200 JSON; same200paths/533schemas as documentation snapshot, with description differences. See STATSAPI_AUDIT.md.
+  verification: 200 JSON; same 200 paths and 533 schemas as the documentation snapshot, with descriptive-text differences. See statsapi_route_inventory.yaml.
   access: public for tested request
+verified_resources:
+  - name: tested_play_resource
+    kind: MP4 media resource
+    discovered_on: '2026-11-09'
+    source: https://baseballsavant.mlb.com/sporty-videos?playId=fced30ac-7099-4337-a52f-9bc983932b31
+    play_id: fced30ac-7099-4337-a52f-9bc983932b31
+    returned_url: https://sporty-clips.mlb.com/MkI3am9fWGw0TUFRPT1fVUZJRUFGY0VCMUVBRDFJTFh3QUFBZ1ZSQUFBQVVRY0FDd2RXQ1FzR0NBQlhVZ0ZY.mp4
+    verification:
+      method: HEAD
+      http_status: 200
+      content_type: video/mp4
+      content_length_bytes: 3957776
+      media_bytes_downloaded: false
+    access: public for tested asset
+  - name: tested_highlight_playlist
+    kind: HLS master playlist
+    discovered_on: '2026-11-09'
+    source: https://statsapi.mlb.com/api/v1/game/716463/content
+    game_pk: 716463
+    returned_url: https://mlb-cuts-diamond.mlb.com/FORGE/2023/2023-09/23/5d472b2f-b2617938-3c241167-csvm-diamondx64-asset.m3u8
+    verification:
+      method: GET
+      http_status: 200
+      content_type: application/vnd.apple.mpegurl
+      body_prefix: '#EXTM3U'
+      segments_downloaded: false
+    access: public for tested playlist
+  - name: observed_game_event_to_pitch_id_join
+    kind: Identifier relationship observation
+    discovered_on: '2026-11-09'
+    game_pk: 716463
+    sources:
+      stats_api_live_feed: https://statsapi.mlb.com/api/v1.1/game/716463/feed/live
+      savant_gamefeed: https://baseballsavant.mlb.com/gf?game_pk=716463
+    observation:
+      distinct_live_feed_play_ids: 342
+      distinct_savant_pitch_play_ids: 340
+      savant_pitch_ids_matching_live_feed: 340
+      generalization: One historical game only; does not establish coverage for all feeds or event types.
+    access: public for tested game
 expanded_reference:
-  audit: MEDIA_AUDIT.md
   inventory: mlb_media_operations.yaml
   note: This hostname inventory records the initial discovery. The operation inventory contains subsequent concrete
     query tests and current results.

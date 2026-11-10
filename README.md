@@ -1,60 +1,100 @@
-# MLB and Baseball Savant data reference
+# MLB data systems and endpoint catalog
 
-Endpoint discovery and data architecture research for Baseball Savant, Statcast and the MLB Stats API. This repository contains documentation and YAML catalogs.
+This repository maps public Baseball Savant, MLB Stats API, Gameday, and MLB video interfaces, and summarizes what first-party sources say about MLB's data systems.
 
-Start with [endpoint research and verification results](ENDPOINT_RESEARCH.md) and [MLB data storage and distribution](MLB_DATA_ARCHITECTURE.md).
+For endpoint inventories and schemas, start with [AGENTS.md](AGENTS.md). The catalogs distinguish documented endpoints, source-discovered routes, directly observed responses, and access that remains unknown.
 
-## Expanded endpoint audit
+## How MLB's data moves
 
-The expanded audit records source coverage, interface definitions and live access results in these files:
+The diagrams below synthesize MLB and Google Cloud descriptions published in 2020, 2022, and 2024. They explain reported system roles; they are not a live deployment map. The articles do not expose MLB's private database schemas, bucket names, or unrestricted storage access. [Sources 1–3](#sources)
 
-| Surface | Captured coverage | Report and interfaces |
-| --- | --- | --- |
-| Stats API | All 200 published GET operations, 533 schemas, 12 supplementary documented operations; 160 direct operation probes | [Audit](STATSAPI_AUDIT.md), [inventory](statsapi_route_inventory.yaml), [OpenAPI snapshot](statsapi_openapi.json) |
-| Savant | 214 method/path templates across 129 page and 219 module requests; 108 read probes | [Audit](SAVANT_AUDIT.md), [inventory](savant_route_inventory.yaml) |
-| Film Room/media | 28 Fastball schema root fields, 22 client document variants, five REST/configuration routes; 15 read-query names verified | [Audit](MEDIA_AUDIT.md), [operations](mlb_media_operations.yaml), [GraphQL schema](mlb_fastball_schema.json) |
-| Gameday services | 36 application templates plus a color-feed reference; 13 read-only HTTP probes | [Audit](GAMEDAY_AUDIT.md), [inventory](gameday_route_inventory.yaml) |
+### Capture, storage, and distribution
 
-The current public [Stats API OpenAPI endpoint](https://statsapi.mlb.com/v3/api-docs) returns a machine-readable specification. The audit compares it with the captured documentation snapshot; a publicly readable specification does not imply anonymous access to every listed operation.
+```mermaid
+flowchart LR
+  subgraph capture[Capture and context]
+    cameras[Hawk-Eye camera tracking]
+    operators[Operator-tagged game context]
+    processing[Stadium-side processing<br/>Anthos and Google Kubernetes Engine<br/>described in 2022]
+    cameras --> processing
+    operators --> processing
+  end
 
-Savant's total includes 120 application-page routes, 87 data/fragment routes, one legacy CSV route, one dynamic image route, one redirect and four source-only mutations. GraphQL root fields, client document variants and HTTP endpoints are different units. The inventories overlap; their counts must not be added as distinct backend APIs.
+  subgraph operational[Operational data and media]
+    sql[Cloud SQL<br/>PostgreSQL game data]
+    bigtable[Bigtable<br/>pose tracking]
+    clips[Cloud Storage<br/>clipped video feeds]
+  end
 
-The original catalogs below remain concise references. The expanded inventories carry source locations, full discovery coverage and per-operation access results. Counts distinguish documented operations, frontend templates and live probes; they are not interchangeable.
+  processing --> sql
+  processing --> bigtable
+  processing --> clips
 
-The [private-service access report](PRIVATE_MLB_SERVICES.md) explains which services are publicly documented, which routes worked anonymously, and what remains restricted or unclear.
+  subgraph distribution[Products and partners]
+    api[Stats API and MLB services]
+    products[Gameday, Savant, MLB apps, Film Room]
+    partners[Clubs, broadcasters, stadium displays]
+  end
 
-## Catalogs
+  sql --> api
+  bigtable --> api
+  api --> products
+  api --> partners
+  clips --> search[Video search and playback]
+```
 
-| Catalog | Contents |
-| --- | --- |
-| [Savant endpoints](savant_endpoints.yaml) | Search, gamefeed, player lookup, Illustrator, replay and play video viewers |
-| [MLB Stats API](statsapi_endpoints.yaml) | Game data, media metadata, live-feed updates, statistics and code lookups |
-| [Media services](mlb_media_endpoints.yaml) | Playback resources and first-party video-service discovery leads |
-| [Leaderboards](savant_leaderboards.yaml) | Leaderboard paths, parameters and inherited field metadata |
-| [CSV fields](baseballsavant_csv_fields.yaml) | Search parameters and aggregate-output field reference |
-| [Game status](statsapi_game_status.yaml) | Game status code reference |
-| [Request limits](savant_rate_limits.yaml) | Current official Stats API rate policy; Savant limits not published in reviewed docs; historical community reports separated |
+The operational stores and stadium processing are drawn from the 2020 and 2022 accounts. The 2024 account confirms the broader API-to-products-and-partners distribution pattern, but does not reconfirm the exact 2022 storage topology. Arrows summarize published descriptions; they do not assert that a public API directly queries Bigtable or that video playback is served from Cloud Storage. [Sources 1–3](#sources)
 
-## What was verified
+### Storage and analytical copies
 
-Checks on **2026-11-09** confirmed public JSON for game content, the v1.1 live feed, feed timestamps, context metrics, Savant gamefeed, player lookup, Illustrator stats and replay breakdowns. Game content includes highlight playback metadata. A play ID from the live feed resolved through Savant's video viewer to an MP4 resource; its HEAD response was `200 video/mp4`. A highlight HLS master playlist returned `200` and an `#EXTM3U` header. These checks used a historical game and do not establish universal season or play coverage. [Evidence](ENDPOINT_RESEARCH.md).
+```mermaid
+flowchart TD
+  subgraph operational[Storage roles described in 2020 and 2022]
+    game[Game records and tagged context] --> sql[Cloud SQL for PostgreSQL]
+    pose[Pose tracking records] --> bt[Bigtable]
+    video[Clipped camera feeds] --> gcs[Cloud Storage]
+  end
 
-The tested play-analytics route returned `401` with an Okta login page. The historical Swagger URL returned `200` HTML for a Docusaurus documentation shell rather than a JSON specification. Authentication is endpoint-specific; public access to selected routes does not establish access to every tracking or media dataset. [Evidence](ENDPOINT_RESEARCH.md).
+  sql --> batch[Nightly Dataflow transfer]
+  bt --> batch
+  batch --> archive[Cloud Storage analytical copies]
+  batch --> bq[BigQuery]
+  bq --> club[Club analytics environments]
+```
 
-The public game-content API exposes archive feed identifiers, and the corresponding MLB.TV URL returns an anonymous HTML player shell. Neither response exposed a full-game stream URL. MLB describes archive availability as subscriber access; see the [broadcast and Hawk-Eye access audit](MEDIA_AUDIT.md#anonymous-access-to-full-game-broadcasts-and-hawk-eye-recordings) for the bounded probe and caveats.
+The 2020 article says clipped video feeds were saved in Cloud Storage for search. The 2022 article describes Cloud SQL for game data, Bigtable for pose tracking, and nightly Dataflow movement into Cloud Storage and BigQuery. Neither establishes current retention, table layouts, bucket paths, or whether analytical and video objects share storage. MLB's 2024 account separately describes Statcast data reaching club BigQuery environments through APIs. [Sources 1–3](#sources)
 
-## Reading the catalogs
+### Public services and what they expose
 
-Each newly verified route records its check date, response type and evidence reference. Entries without verification are inherited references or explicitly marked discovery leads. An HTML application, JSON endpoint, video resource and internal storage component are different kinds of surface. Hostnames found in application configuration are leads until an actual operation is verified.
+```mermaid
+flowchart LR
+  savant[Baseball Savant] --> stats[MLB Stats API]
+  gameday[MLB Gameday client] --> stats
+  gameday --> bdfed[BDFed game aggregation]
+  gameday --> scout[Scout Insights<br/>tested routes require token]
 
-The concise catalogs do not replace the captured official Stats API specification. Inherited field lists, leaderboard availability dates and query options have not all been revalidated. Request-limit status and evidence are recorded separately in [savant_rate_limits.yaml](savant_rate_limits.yaml). The CSV field list describes an aggregate search context and should not be treated as the complete pitch-level Statcast schema; consult MLB's [CSV documentation](https://baseballsavant.mlb.com/csv-docs).
+  film[Film Room client] --> fastball[Fastball GraphQL]
+  film --> datagraph[Data Graph]
+  stats --> content[Game and editorial metadata]
+  datagraph --> metadata[Video and story metadata]
+  content --> metadata
+  metadata --> playback[Returned MP4 or HLS playback URLs]
+  stats -. selected analytics routes required authentication in tested requests .-> restricted[Restricted analytics data]
+```
 
-MLB's engineering articles describe PostgreSQL, Bigtable, Cloud Storage and BigQuery at different dates. The [architecture reference](MLB_DATA_ARCHITECTURE.md) separates those historical accounts from observed public responses and identifies unresolved questions.
+This diagram combines repository observations with the dated distribution accounts. Gameday uses both Stats API and BDFed services; tested Scout routes required a bearer token. The endpoint observations are mainly from November 9, 2026. The diagram distinguishes event metadata from playback resources: tested public routes returned selected clip URLs, while tested detailed tracking routes required authentication. These observations apply to the requests and dates recorded in the [endpoint catalogs](AGENTS.md); they do not imply access to raw camera recordings, full broadcasts, or private databases.
 
-MLB/MLBAM copyright and [terms of use](https://www.mlb.com/official-information/terms-of-use) apply. Access checks are observations, not licensing conclusions or stable service guarantees.
+## How to interpret the architecture
 
-## Verification
+- MLB's engineering sources describe different dates and levels of detail. The 2020 camera, PostgreSQL, and clipped-video account; the 2022 storage and processing account; and the 2024 API distribution account are compatible, but do not prove that every component remains deployed as described.
+- A Savant export, Stats API response, GraphQL result, playback URL, and internal storage object are different representations. An identifier match in one observed game does not guarantee universal coverage or a complete event-to-video join.
+- Publicly readable documentation or a schema does not mean every operation or underlying dataset is publicly accessible. Authentication and response outcomes are recorded per request in the inventories.
+- Nothing in the reviewed sources establishes a public raw-data bucket, direct database access, complete pose export, or anonymous full-game stream.
 
-All YAML catalogs parse without duplicate keys; local document links resolve. The Stats API inventory contains exactly the 200 operation keys in the captured specification, and its 1,627 internal schema references resolve. Snapshot hashes and source references are recorded and checked. No JavaScript application, package manifest, examples directory or runnable script samples are retained.
+## Sources
 
-Coverage is complete for the explicitly audited source sets. It does not establish all private MLB services, every dynamic/feature-gated route or every parameter combination. Restricted interfaces, disabled introspection, failed requests and unprobed operations remain visible in the inventories.
+1. Ben Jedlovec, MLB Technology Blog, July 20, 2020, [Introducing Statcast 2020: Hawk-Eye and Google Cloud](https://technology.mlblogs.com/introducing-statcast-2020-hawk-eye-and-google-cloud-a5f5c20321b8). The camera, PostgreSQL, Stats API distribution, and clipped-video statements are historical descriptions from this article.
+2. Priyanka Vergadia with MLB's Rob Engel, Google Cloud, April 7, 2022, [Teaming up with MLB for game-changing sports analytics](https://cloud.google.com/blog/products/data-analytics/mlb-pitches-new-data-uses-with-google-cloud-services). Describes stadium processing, manual context tagging, Cloud SQL, Bigtable, Dataflow, Cloud Storage, BigQuery, and product feeds.
+3. Rob Engel, MLB VP of Software Engineering, Google Cloud, June 13, 2024, [AI at Bat: How Major League Baseball is surfacing stats faster with AI](https://cloud.google.com/transform/mlb-statcast-ai-fan-experience-team-analytics). Describes near-real-time APIs and distribution to MLB products, clubs, scoreboards, and broadcast partners.
+
+MLB/MLBAM [terms of use](https://www.mlb.com/official-information/terms-of-use) apply. Repository observations are documentation, not a licensing determination or a guarantee of stable service behavior.

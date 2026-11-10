@@ -4,7 +4,7 @@ api:
   version: v1; v1.1 for live feed, timestamps and diffPatch
   format: JSON
   auth: Endpoint-specific; verified public routes need no credentials. Play analytics probe required login.
-  catalog_status: Inherited entries are not all verified; see per-entry verification and ENDPOINT_RESEARCH.md.
+  catalog_status: Inherited entries are not all verified; see per-entry verification and statsapi_route_inventory.yaml.
 endpoints:
   sport:
     name: sports
@@ -241,7 +241,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: people_stats
     specification:
       documented: true
@@ -269,7 +269,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 404
       response_type: JSON error served as text/plain
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: people_gamelog
     status: Not found for tested request; use /people/{personId}/stats with stats=gameLog&group=hitting.
     specification:
@@ -290,7 +290,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: feed
     specification:
       documented: true
@@ -336,7 +336,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 404
       response_type: JSON error served as text/plain
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: decisions
     status: Not found for tested request; decisions are available under liveData.decisions in the v1.1 feed.
     specification:
@@ -351,7 +351,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: content
     response_fields:
     - highlights.highlights.items[].id
@@ -593,7 +593,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: timestamps
     specification:
       documented: true
@@ -614,7 +614,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: diff
     specification:
       documented: true
@@ -633,7 +633,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: context
     specification:
       documented: true
@@ -651,7 +651,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: lookup
     specification:
       documented: true
@@ -669,7 +669,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: metrics
     specification:
       documented: true
@@ -687,7 +687,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: stats_types
     specification:
       documented: true
@@ -705,7 +705,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 200
       response_type: JSON
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: groups
     specification:
       documented: true
@@ -727,7 +727,7 @@ endpoints:
       checked_on: '2026-11-09'
       http_status: 401
       response_type: HTML Okta login
-      evidence: ENDPOINT_RESEARCH.md
+      evidence: statsapi_route_inventory.yaml
       probe: analytics
     specification:
       documented: true
@@ -746,7 +746,7 @@ notes:
 - An HTTP 200 may contain HTML login or a full-feed fallback; inspect content type and payload.
 - No completeness or official support guarantee is implied by anonymous access.
 - See /standings in main list
-- See /stats/streaks
+- See /streaks
 team_ids:
   source: https://statsapi.mlb.com/api/v1/teams?sportId=1
   checked_on: '2026-11-09'
@@ -782,6 +782,5 @@ team_ids:
     Washington Nationals: 120
     New York Mets: 121
 expanded_reference:
-  audit: STATSAPI_AUDIT.md
   inventory: statsapi_route_inventory.yaml
   specification: statsapi_openapi.json

@@ -1,6 +1,6 @@
 reviewed_on: '2026-11-09'
-status: Public Fastball schema inventoried plus source-frontier audit of stated Film Room/Gameday deployments; Data
-  Graph introspection disabled and configured CMS DNS unavailable. No claim about all private MLB services.
+status: Public Fastball schema and bounded Film Room/Gameday source inventory; Data Graph introspection disabled and
+  configured CMS DNS unavailable. Not a complete inventory of all MLB services.
 primary_surface: https://www.mlb.com/video
 coverage:
   film_room_bundle_bytes: 3669812
@@ -1426,6 +1426,15 @@ operations:
       - storytype-article
       contentSource: MLB
     result: 200 JSON data.getGamesByGamePks[].content; 25 videoContent records for game 716463
+    identifier_join:
+      joined_field: guid (source field playGuid)
+      stats_api_field: liveData.plays.allPlays[].playEvents[].playId
+      matched_guid_count: 16
+      example:
+        clip_slug: jordan-romano-in-play-run-s-to-josh-lowe
+        guid: ec8bdeff-ca06-4ab5-8a37-1d2a72fa014a
+        stats_api_play_id: ec8bdeff-ca06-4ab5-8a37-1d2a72fa014a
+      limitation: Observed in this game's response only; does not establish universal clip coverage or timing.
     transport: POST
     other_attempts: Full-query and source-defined persisted-query GETs both returned 400 with empty body.
   response_fields_from_source:
@@ -2166,7 +2175,7 @@ rest_operations:
   method: GET
   url_template: https://dapi.mlbinfra.com/v2/content/en-us/videos/vizcast-{gamePk}
   purpose: Game Vizcast video metadata; linked playbackScenarios location in Savant client.
-  source: Savant gamefeed-all.js; see SAVANT_AUDIT.md and savant_route_inventory.yaml
+  source: Savant gamefeed-all.js; see savant_route_inventory.yaml
   checked_on: '2026-11-09'
   verification: called anonymously
   probe:

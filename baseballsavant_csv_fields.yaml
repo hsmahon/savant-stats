@@ -4,6 +4,11 @@ endpoint:
   notes:
     - "Fields discovered from endpoint header row with all available chk_stats_* flags enabled."
     - "Some fields may vary by query context (group_by, player_type, selected filters)."
+    - "This list describes the aggregate-stat output observed for that request; it is not the complete pitch-level CSV schema."
+    - "The official CSV field documentation was rechecked on 2026-11-10. For 2026 data, plate_x and plate_z are measured at the middle of home plate (through 2025 they were measured at the front), and sz_top/sz_bot use the ABS-defined strike zone. Interpret measurements across seasons with this change in mind."
+  field_documentation:
+    url: "https://baseballsavant.mlb.com/csv-docs"
+    checked_on: "2026-11-10"
 
 csv_output_fields:
   - pitches

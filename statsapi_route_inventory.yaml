@@ -1,4 +1,4 @@
-audit_date: '2026-11-09'
+reviewed_on: '2026-11-09'
 scope: Every operation in the extracted official OpenAPI reference; supplement document-only routes below.
 provenance:
   documentation_home: https://docs.statsapi.mlb.com/
@@ -20,12 +20,12 @@ provenance:
     http_status: 200
     content_type: application/json;charset=UTF-8
     bytes: 573729
-    sha256: c091cc43e49030bd578b46adeda9386c4b3d53670c57e321b79b02f201ca5321
+    sha256: 930f97809810154fdf4330ba5d9c996bd24740862400d2ae48c31afb539bbf39
     paths: 200
     component_schemas: 533
-    comparison: All path/method interfaces, full components and parameter metadata excluding description match the
-      embedded documentation snapshot. Summaries, operation descriptions and some parameter descriptions differ.
-      Bundled snapshot retains richer annotations.
+    comparison: All paths, methods, components, and parameter metadata match the embedded snapshot after removing
+      summary and description text. Descriptive metadata differs; bundled snapshot retains richer annotations.
+    checked_on: '2026-11-10'
 coverage:
   openapi_paths: 200
   openapi_operations: 200

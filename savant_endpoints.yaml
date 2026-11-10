@@ -5,7 +5,7 @@ endpoints:
   method: GET
   format: CSV
   rate_limit: No official figure established; historical reports vary. See savant_rate_limits.yaml.
-  timeout: ~30 seconds for complex queries
+  timeout: No platform timeout documented; clients should select a timeout appropriate to query size.
   common_params:
   - hfPT
   - hfAB
@@ -165,7 +165,7 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: JSON
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: gf
 - name: comparison_tool
   description: Player comparison tool (HTML UI, 2026+)
@@ -212,7 +212,7 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: HTML with video source
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: sporty_play
 - name: player_search_statcast
   url: https://baseballsavant.mlb.com/player/search-statcast
@@ -227,7 +227,7 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: JSON
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: player_search
 - name: illustrator_stats
   url: https://baseballsavant.mlb.com/illustrator/stats
@@ -241,7 +241,7 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: JSON
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: illustrator_stats
 - name: replay
   url: https://baseballsavant.mlb.com/replay
@@ -255,7 +255,7 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: HTML with embedded data
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: replay
 - name: replay_breakdown
   url: https://baseballsavant.mlb.com/leaderboard/replay/breakdown
@@ -270,7 +270,7 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: JSON
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: replay_breakdown
 - name: illustrator
   url: https://baseballsavant.mlb.com/illustrator
@@ -283,10 +283,10 @@ endpoints:
     checked_on: '2026-11-09'
     http_status: 200
     response_type: HTML application
-    evidence: ENDPOINT_RESEARCH.md
+    evidence: savant_route_inventory.yaml
     probe: illustrator
 infrastructure:
-  reference: MLB_DATA_ARCHITECTURE.md
+  reference: README.md
   note: Dated primary-source architecture; do not infer public database or bucket access.
 terms_of_use:
 - MLB/MLBAM copyright and terms apply; endpoint accessibility does not establish redistribution rights.
@@ -294,5 +294,4 @@ terms_of_use:
 - No universal authentication or rate-limit policy established by this catalog.
 catalog_status: Existing entries without verification are inherited leads, not live-verified contracts.
 expanded_reference:
-  audit: SAVANT_AUDIT.md
   inventory: savant_route_inventory.yaml

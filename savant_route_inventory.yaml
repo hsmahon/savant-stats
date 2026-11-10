@@ -1,7 +1,7 @@
 reviewed_on: '2026-11-09'
-status: bounded_public_source_audit_complete
+status: bounded_public_source_inventory
 base_url: https://baseballsavant.mlb.com
-evidence: SAVANT_AUDIT.md
+evidence: Source URLs, response observations, and access results are recorded in this inventory.
 scope: Every unique no-player-ID navigation/application page discovered in the bounded frontier, two concrete player pages,
   linked relevant static and literal dynamic modules. All private/server-only routes and infinite parameter combinations excluded.
 coverage:
