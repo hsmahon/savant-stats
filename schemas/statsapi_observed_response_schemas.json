@@ -1,0 +1,951 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Observed Stats API JSON response shapes",
+  "description": "Partial, sample-derived schemas. They describe bounded anonymous responses and do not define every valid response. Properties are not marked required because the samples do not establish universal requirements.",
+  "x-captured-on": "2026-11-10",
+  "x-evidence-note": "../MLB_PUBLIC_DATA_EVIDENCE.md",
+  "$defs": {
+    "live_feed": {
+      "title": "Live Feed",
+      "description": "HTTP 200 sample from https://statsapi.mlb.com/api/v1.1/game/{gamePk}/feed/live; SHA-256 ad8487b9d283c24eae8efe8fe5a11c6c2ad3062c82c196596539564eac436c9f. Nested object properties were sampled to depth 3.",
+      "type": "object",
+      "properties": {
+        "copyright": {
+          "type": "string"
+        },
+        "gameData": {
+          "type": "object",
+          "properties": {
+            "alerts": {
+              "type": "array",
+              "items": {}
+            },
+            "datetime": {
+              "type": "object",
+              "properties": {
+                "ampm": {
+                  "type": "string"
+                },
+                "dateTime": {
+                  "type": "string"
+                },
+                "dayNight": {
+                  "type": "string"
+                },
+                "officialDate": {
+                  "type": "string"
+                },
+                "originalDate": {
+                  "type": "string"
+                },
+                "time": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "flags": {
+              "type": "object",
+              "properties": {
+                "awayTeamNoHitter": {
+                  "type": "boolean"
+                },
+                "awayTeamPerfectGame": {
+                  "type": "boolean"
+                },
+                "homeTeamNoHitter": {
+                  "type": "boolean"
+                },
+                "homeTeamPerfectGame": {
+                  "type": "boolean"
+                },
+                "noHitter": {
+                  "type": "boolean"
+                },
+                "perfectGame": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            },
+            "game": {
+              "type": "object",
+              "properties": {
+                "calendarEventID": {
+                  "type": "string"
+                },
+                "doubleHeader": {
+                  "type": "string"
+                },
+                "gameNumber": {
+                  "type": "integer"
+                },
+                "gamedayType": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "pk": {
+                  "type": "integer"
+                },
+                "season": {
+                  "type": "string"
+                },
+                "seasonDisplay": {
+                  "type": "string"
+                },
+                "tiebreaker": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "gameInfo": {
+              "type": "object",
+              "properties": {
+                "attendance": {
+                  "type": "integer"
+                },
+                "firstPitch": {
+                  "type": "string"
+                },
+                "gameDurationMinutes": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            },
+            "moundVisits": {
+              "type": "object",
+              "properties": {
+                "away": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "home": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "officialScorer": {
+              "type": "object",
+              "properties": {
+                "fullName": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "link": {
+                  "type": "string"
+                },
+                "nameSlug": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "officialVenue": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "link": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "players": {
+              "type": "object",
+              "properties": {
+                "ID518617": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID541640": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID542194": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID542888": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID543807": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID547943": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID552640": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID554340": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID592332": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID593160": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID595281": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID596112": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID605135": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID605447": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID606132": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID606965": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID607192": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID621107": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID621244": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID621363": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID622534": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID623168": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID623912": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID624415": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID641793": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID641835": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID643338": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID650490": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID650644": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID650893": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID650907": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID656305": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID657024": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID662139": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID663855": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID663878": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID664126": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID665489": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID666018": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID666139": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID666182": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID668227": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID669289": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID670623": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID670764": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID670950": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID671737": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID672386": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID676914": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID678545": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID678554": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID686490": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID687330": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID687462": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "ID691406": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "primaryDatacaster": {
+              "type": "object",
+              "properties": {
+                "fullName": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "link": {
+                  "type": "string"
+                },
+                "nameSlug": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "probablePitchers": {
+              "type": "object",
+              "properties": {
+                "away": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "home": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "review": {
+              "type": "object",
+              "properties": {
+                "away": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "hasChallenges": {
+                  "type": "boolean"
+                },
+                "home": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "status": {
+              "type": "object",
+              "properties": {
+                "abstractGameCode": {
+                  "type": "string"
+                },
+                "abstractGameState": {
+                  "type": "string"
+                },
+                "codedGameState": {
+                  "type": "string"
+                },
+                "detailedState": {
+                  "type": "string"
+                },
+                "startTimeTBD": {
+                  "type": "boolean"
+                },
+                "statusCode": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "teams": {
+              "type": "object",
+              "properties": {
+                "away": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "home": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "venue": {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "boolean"
+                },
+                "fieldInfo": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "link": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "season": {
+                  "type": "string"
+                },
+                "timeZone": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "weather": {
+              "type": "object",
+              "properties": {
+                "condition": {
+                  "type": "string"
+                },
+                "temp": {
+                  "type": "string"
+                },
+                "wind": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "gamePk": {
+          "type": "integer"
+        },
+        "link": {
+          "type": "string"
+        },
+        "liveData": {
+          "type": "object",
+          "properties": {
+            "boxscore": {
+              "type": "object",
+              "properties": {
+                "info": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "officials": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "pitchingNotes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "teams": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "topPerformers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "decisions": {
+              "type": "object",
+              "properties": {
+                "loser": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "winner": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "leaders": {
+              "type": "object",
+              "properties": {
+                "hitDistance": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "hitSpeed": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "pitchSpeed": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "linescore": {
+              "type": "object",
+              "properties": {
+                "balls": {
+                  "type": "integer"
+                },
+                "currentInning": {
+                  "type": "integer"
+                },
+                "currentInningOrdinal": {
+                  "type": "string"
+                },
+                "defense": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "inningHalf": {
+                  "type": "string"
+                },
+                "inningState": {
+                  "type": "string"
+                },
+                "innings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "isTopInning": {
+                  "type": "boolean"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "offense": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "outs": {
+                  "type": "integer"
+                },
+                "scheduledInnings": {
+                  "type": "integer"
+                },
+                "strikes": {
+                  "type": "integer"
+                },
+                "teams": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "plays": {
+              "type": "object",
+              "properties": {
+                "allPlays": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "currentPlay": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "playsByInning": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "scoringPlays": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "metaData": {
+          "type": "object",
+          "properties": {
+            "gameEvents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "logicalEvents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "timeStamp": {
+              "type": "string"
+            },
+            "wait": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "game_content": {
+      "title": "Game Content",
+      "description": "HTTP 200 sample from https://statsapi.mlb.com/api/v1/game/{gamePk}/content; SHA-256 f8aa51e6d68555fefee3fc5596d0eddc4559d1d3a73a456e85cd39cdb7997270. Nested object properties were sampled to depth 3.",
+      "type": "object",
+      "properties": {
+        "copyright": {
+          "type": "string"
+        },
+        "editorial": {
+          "type": "object",
+          "properties": {
+            "articles": {
+              "type": "null"
+            },
+            "preview": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            },
+            "recap": {
+              "type": "object",
+              "properties": {
+                "mlb": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "wrap": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "gameNotes": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "highlights": {
+          "type": "object",
+          "properties": {
+            "gameCenter": {
+              "type": "null"
+            },
+            "highlights": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "live": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {}
+                }
+              },
+              "additionalProperties": true
+            },
+            "milestone": {
+              "type": "null"
+            },
+            "scoreboard": {
+              "type": "null"
+            },
+            "scoreboardPreview": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {}
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "link": {
+          "type": "string"
+        },
+        "media": {
+          "type": "object",
+          "properties": {
+            "enhancedGame": {
+              "type": "boolean"
+            },
+            "epg": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "epgAlternate": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "featuredMedia": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "freeGame": {
+              "type": "boolean"
+            },
+            "milestones": {
+              "type": "null"
+            },
+            "previewStory": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "mlb": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "hasHighlightsVideo": {
+              "type": "boolean"
+            },
+            "hasPreviewArticle": {
+              "type": "boolean"
+            },
+            "hasRecapArticle": {
+              "type": "boolean"
+            },
+            "hasWrapArticle": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "schedule_broadcast_epg": {
+      "title": "Schedule Broadcast Epg",
+      "description": "HTTP 200 sample from https://statsapi.mlb.com/api/v1/schedule?...&hydrate=broadcasts(all),game(content(media(epg))); SHA-256 85740589dd2c3d8dbc1975fd0db8047e3ac9fd88b46eba52eee0713d41cd9d91. Nested object properties were sampled to depth 3.",
+      "type": "object",
+      "properties": {
+        "copyright": {
+          "type": "string"
+        },
+        "dates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "events": {
+                "type": "array",
+                "items": {}
+              },
+              "games": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "totalEvents": {
+                "type": "integer"
+              },
+              "totalGames": {
+                "type": "integer"
+              },
+              "totalGamesInProgress": {
+                "type": "integer"
+              },
+              "totalItems": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "totalEvents": {
+          "type": "integer"
+        },
+        "totalGames": {
+          "type": "integer"
+        },
+        "totalGamesInProgress": {
+          "type": "integer"
+        },
+        "totalItems": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

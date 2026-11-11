@@ -745,7 +745,7 @@ operations:
   endpoint: https://fastball-gateway.mlb.com/graphql
   method: GET
   classification: server operation
-  purpose: Validate a ReelInput; complete input metadata is now retained in mlb_fastball_schema.json.
+  purpose: Validate a ReelInput; complete input metadata is now retained in ../schemas/fastball_graphql_schema.json.
   response_fields_from_source:
   - validateReel.valid
   - validateReel.errors
@@ -2212,7 +2212,7 @@ source_manifest:
   role: Publicly referenced source map; 2188 source entries; original Film Room query/mutation modules and local
     network resolvers audited
 catalog_interpretation: Client operation variable declarations are taken from first-party documents; the separate
-  schema_root_interfaces and mlb_fastball_schema.json describe the introspected server schema. Server defaults and
+  schema_root_interfaces and ../schemas/fastball_graphql_schema.json describe the introspected server schema. Server defaults and
   client variable defaults are distinct. HTTP 200 GraphQL errors, HTTP errors, empty results, and source-only resolvers
   are not interchangeable. Browser telemetry is excluded.
 search_field_metadata:
@@ -4024,7 +4024,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4036,7 +4036,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4056,7 +4056,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4108,7 +4108,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4136,7 +4136,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4168,7 +4168,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4184,7 +4184,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4200,7 +4200,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4256,7 +4256,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4288,7 +4288,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4308,7 +4308,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4324,7 +4324,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4340,7 +4340,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4360,7 +4360,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4380,7 +4380,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4396,7 +4396,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4432,7 +4432,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4468,7 +4468,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4508,7 +4508,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4552,7 +4552,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4596,7 +4596,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4632,7 +4632,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4652,7 +4652,7 @@ schema_root_interfaces:
   description: Criterion queries
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4668,7 +4668,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4684,7 +4684,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4700,7 +4700,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: false
@@ -4716,7 +4716,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4733,7 +4733,7 @@ schema_root_interfaces:
   description: null
   deprecated: false
   deprecation_reason: null
-  source: mlb_fastball_schema.json
+  source: ../schemas/fastball_graphql_schema.json
   discovery: anonymous standard GraphQL introspection
   checked_on: '2026-11-09'
   referenced_by_inspected_client_document: true
@@ -4747,7 +4747,7 @@ schema_checks:
   checked_on: '2026-11-09'
   http_status: 200
   result: standard schema introspection available anonymously
-  snapshot: mlb_fastball_schema.json
+  snapshot: ../schemas/fastball_graphql_schema.json
   snapshot_sha256: ec81b107815560cc2ee0606b83dfcdab4808c30f7ac440b6cead65e1f1b01a21
   query_root_fields: 26
   mutation_root_fields: 2

@@ -1,0 +1,290 @@
+{
+  "description": "Top-level JSON response shapes recorded from direct Gameday, BDFed, CMS, Stats API, and Scout probes. These are observations, not complete service contracts. HTTP errors and auth responses are included where the inventory recorded a JSON body shape.",
+  "source": "../api-routes/gameday_route_inventory.yaml",
+  "responses": [
+    {
+      "url": "https://dapi.cms.mlbinfra.com/v2/content/en-us/stories?tags.slug=gamepk-716463&$limit=1&$sort=contentDate:desc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "topLevelKeys": [
+        "pagination",
+        "meta",
+        "items"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "pagination": {},
+          "meta": {},
+          "items": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/contentful/dictionary/mlb-gameday/en-JP",
+      "status": 200,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "dictionary"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "dictionary": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://scout-insights-api.mlbinfra.com/api/v1/insights/716463/20230923_231745",
+      "status": 401,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "message",
+        "details"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "message": {},
+          "details": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/gameday/en-US?gamePk=716463&config=true&appContext=mlb&stitch_env=prod",
+      "status": 200,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "teamId",
+        "name",
+        "teamNameDisplay",
+        "triCode",
+        "sportId",
+        "type",
+        "sid",
+        "socialFooter",
+        "bettingOddsSchedule",
+        "internalName",
+        "sportIds",
+        "leagueIds",
+        "disableDynamicFieldView",
+        "disableDynamicFieldViewDesktop",
+        "disableDynamicFieldViewMobile",
+        "disableFieldVision",
+        "disableFieldVisionOD",
+        "useFallbackFV",
+        "fieldVisionLiveFreeGameOnly",
+        "disableDynamicUniforms"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "teamId": {},
+          "name": {},
+          "teamNameDisplay": {},
+          "triCode": {},
+          "sportId": {},
+          "type": {},
+          "sid": {},
+          "socialFooter": {},
+          "bettingOddsSchedule": {},
+          "internalName": {},
+          "sportIds": {},
+          "leagueIds": {},
+          "disableDynamicFieldView": {},
+          "disableDynamicFieldViewDesktop": {},
+          "disableDynamicFieldViewMobile": {},
+          "disableFieldVision": {},
+          "disableFieldVisionOD": {},
+          "useFallbackFV": {},
+          "fieldVisionLiveFreeGameOnly": {},
+          "disableDynamicUniforms": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/gameday-content/?locale=en&gamePk=716463",
+      "status": 200,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "audio",
+        "tv",
+        "videos",
+        "recap",
+        "summary",
+        "epg"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "audio": {},
+          "tv": {},
+          "videos": {},
+          "recap": {},
+          "summary": {},
+          "epg": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/playMetrics/716463?keyMoments=true&scoringPlays=true&homeRuns=true&strikeouts=true&hardHits=true&highLeverage=true&leadChange=true&winProb=true&absChallenge=true",
+      "status": 200,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "scoringPlays",
+        "homeRuns",
+        "hardHits",
+        "strikeouts",
+        "leadChange",
+        "highLeverage",
+        "winProb",
+        "keyMoments",
+        "absChallenge",
+        "allPlayMetrics"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "scoringPlays": {},
+          "homeRuns": {},
+          "hardHits": {},
+          "strikeouts": {},
+          "leadChange": {},
+          "highLeverage": {},
+          "winProb": {},
+          "keyMoments": {},
+          "absChallenge": {},
+          "allPlayMetrics": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/gameday-team-comparison?homeId=139&awayId=141&gameType=R&endDate=2023-09-23",
+      "status": 500,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "error"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "error": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/spotlight-game/en-US?gamePk=716463",
+      "status": 200,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "flipYear",
+        "useDate",
+        "useSeason",
+        "useSeasonState",
+        "useGameType",
+        "limit",
+        "page",
+        "playersRequested",
+        "totalPages",
+        "maxPlayers",
+        "exceededMax",
+        "players",
+        "reqHeaders",
+        "headers",
+        "status"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "flipYear": {},
+          "useDate": {},
+          "useSeason": {},
+          "useSeasonState": {},
+          "useGameType": {},
+          "limit": {},
+          "page": {},
+          "playersRequested": {},
+          "totalPages": {},
+          "maxPlayers": {},
+          "exceededMax": {},
+          "players": {},
+          "reqHeaders": {},
+          "headers": {},
+          "status": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://statsapi.mlb.com/api/v1/uniforms/game?gamePks=716463",
+      "status": 200,
+      "contentType": "application/json;charset=UTF-8",
+      "topLevelKeys": [
+        "copyright",
+        "uniforms"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "copyright": {},
+          "uniforms": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://bdfed.stitch.mlbinfra.com/bdfed/matchup/716463",
+      "status": 200,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "probables",
+        "home",
+        "away"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "probables": {},
+          "home": {},
+          "away": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    },
+    {
+      "url": "https://scout-insights-api.mlbinfra.com/api/v1/scout-game-briefings/716463/20230923_231745",
+      "status": 401,
+      "contentType": "application/json",
+      "topLevelKeys": [
+        "message",
+        "details"
+      ],
+      "responseShape": {
+        "type": "object",
+        "properties": {
+          "message": {},
+          "details": {}
+        },
+        "additionalProperties": true
+      },
+      "scope": "Top-level keys recorded in route inventory; nested schema and values are not included."
+    }
+  ]
+}

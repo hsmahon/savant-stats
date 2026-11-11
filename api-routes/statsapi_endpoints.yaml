@@ -152,6 +152,13 @@ endpoints:
       endDate: YYYY-MM-DD
       teamId: team to filter
       hydrate: team,venue,probablePitcher,linescore
+    observed_hydrations:
+      game_broadcast_and_epg_metadata:
+        query: broadcasts(all),game(content(media(epg)))
+        observed_on: '2026-11-10'
+        request: https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2023-09-23&gamePk=716463&hydrate=broadcasts(all),game(content(media(epg)))
+        result: HTTP 200 anonymous JSON; includes broadcast station, mediaId, contentId, feed type, and MLBTV-Audio EPG metadata.
+        limits: Metadata only; no audio playback URL or storage origin returned in this response.
     specification:
       documented: true
       inventory: statsapi_route_inventory.yaml
