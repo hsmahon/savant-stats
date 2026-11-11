@@ -12,99 +12,29 @@ Captured November 10, 2026. This note joins dated first-party engineering descri
 | Audio and broadcast metadata | MLB's help pages describe MLB Audio as a subscriber feature. The published architecture articles reviewed here do not identify an audio storage or streaming origin. | Schedule hydration returned TV/radio station entries and MLBTV-Audio EPG records with `mediaId`, `contentId`, feed type, language, and media state. The response did not include an audio playback URL. | The audio resolver, stream host, codecs, object store, retention, and the meaning of per-feed availability flags remain unknown. An EPG ID or `availableForStreaming` value is not a public stream URL or proof that playback is anonymous. |
 | Historical and editorial media | Google Cloud's 2022 article reports more than 60 PB of historical MLB archives and says Film Room's searchable video library spans decades. The separate 2020 Statcast article documents a specific clipped-video Cloud Storage role. | The public game-content response separates editorial metadata from playable clip resources. | The archive-wide 60 PB figure does not specify that all data is video or that it resides in one store. No public bucket names, object layout, or retention policy were found. |
 
-## Public and reported data paths
+## Observed public data paths
 
 ```mermaid
-flowchart LR
-  subgraph reported[Reported paths: dated sources]
-    sensors[Tracking systems<br/>player movement data]
-    tags[Operator apps<br/>event metadata]
-    amq[AMQ queue<br/>2025 report figure]
-    injection[Injection services]
-    edgecache[Valkey edge cache<br/>Google Distributed Cloud]
-    cloud[Google Cloud services]
-    sensors -->|send tracking data| amq
-    tags -->|send metadata| amq
-    amq -->|send messages| injection
-    edgecache -->|read| injection
-    injection -->|write| edgecache
-    injection -->|write data| cloud
-
-    game[Game records] -->|store| sql[Cloud SQL<br/>PostgreSQL, 2022]
-    pose[Player pose records] -->|store| bt[Bigtable, 2022]
-    sql -->|nightly read| df[Dataflow, 2022]
-    bt -->|nightly read| df
-    df -->|write analytics copies| lake[Cloud Storage and BigQuery]
-    clips[Clipped camera feeds] -->|save for search, 2020| clipstore[Cloud Storage]
-    history[Film Room archive] -->|hosted on Google Cloud, 2022| google[Google Cloud<br/>exact store unknown]
-    ingest[Ballpark ingestion apps]
-    eastapps[GCP apps<br/>East region]
-    east[GUMBO cache<br/>East region]
-    eventjob[opjob-event]
-    central[GUMBO cache<br/>Central region]
-    centralapps[GCP apps<br/>Central region]
-    eastapi[Stats API<br/>East region]
-    centralapi[Stats API<br/>Central region]
-    cdn[CDN<br/>product not named]
-    users[Fans and internal users]
-    ingest -->|POST data| eastapps
-    eastapps -->|write| east
-    east -->|read| eastapps
-    east -->|send updates| eventjob
-    eventjob -->|replicate data| central
-    central -->|read| centralapps
-    centralapps -->|write| central
-    eastapps -->|provide game data| eastapi
-    centralapps -->|provide game data| centralapi
-    eastapi --> cdn
-    centralapi --> cdn
-    cdn -->|serve getLiveGumbo| users
-    db[Database<br/>specific store not named]
-    regular[Regular Valkey cluster]
-    heavy[Heavy Valkey cluster]
-    apps[Apps and clients]
-    apps -->|request stats and roster data| regular
-    apps -->|request data| heavy
-    regular -->|read on cache miss| db
-    heavy -->|read on cache miss| db
-    db -->|populate cache| regular
-    db -->|populate cache| heavy
-    regular -->|return data| apps
-    heavy -->|return data| apps
-  end
-
-  subgraph observed[Observed public paths: Nov 10, 2026]
-    stats[Stats API]
-    live[GET /api/v1.1/game/{gamePk}/feed/live<br/>play and pitch JSON]
-    schedule[GET /api/v1/schedule<br/>date and hydrate parameters]
-    gamecontent[GET /api/v1/game/{gamePk}/content<br/>editorial and clip JSON]
-    csvsite[Baseball Savant]
-    csv[GET /statcast_search/csv<br/>pitch-level rows]
-    film[Film Room page]
-    fastball[Fastball GraphQL<br/>Search and topic operations]
-    clipurls[MP4 and HLS clip URLs]
-    delivery[mlb-cuts-diamond.mlb.com<br/>sampled public clip host]
-    hls[HLS master playlist<br/>variant list and codecs]
-    mp4[MP4 clip<br/>H.264 video and AAC audio]
-    audio[MLB Audio<br/>stream origin unknown]
-    epg[EPG feed IDs<br/>no playback URL observed]
-    stats -->|GET live feed| live
-    stats -->|GET schedule| schedule
-    stats -->|GET game content| gamecontent
-    csvsite -->|GET CSV query| csv
-    film -->|GET GraphQL requests, 200| fastball
-    gamecontent -->|return links| clipurls
-    clipurls -->|point to| delivery
-    delivery -->|return playlist| hls
-    delivery -->|return clip| mp4
-    schedule -->|return IDs| epg
-    epg -.->|audio resolver not observed| audio
-  end
-  eastapi -.->|same region as public request unknown| stats
-  centralapi -.->|same region as public request unknown| stats
+flowchart TB
+  stats[Stats API] -->|GET| live["/api/v1.1/game/{gamePk}/feed/live<br/>play and pitch JSON"]
+  stats -->|GET| schedule["/api/v1/schedule<br/>date and hydrate parameters"]
+  stats -->|GET| content["/api/v1/game/{gamePk}/content<br/>editorial and clip JSON"]
+  site[Baseball Savant] -->|GET| csv["/statcast_search/csv<br/>pitch-level rows"]
 ```
 
-The solid arrows show flows that a source describes. The dotted arrows show links that remain unknown. The reports describe services from different years. The browser and HTTP records show requests from November 10, 2026. They do not prove that the sampled Stats API request used a specific GUMBO region, Cloud SQL, or Bigtable. They do not prove that the clip host reads from the reported Cloud Storage bucket. The EPG response did not show an audio resolver. The 2025 article calls the cache service Memorystore for Valkey. Its GUMBO figure labels the cache "redis gumbo." Its CDN figure does not name a product. Do not assume that this is Google Media CDN.
+```mermaid
+flowchart TB
+  content[Game content response] -->|return| links[MP4 and HLS URLs]
+  links -->|point to| host[mlb-cuts-diamond.mlb.com]
+  host -->|return| hls[HLS playlist<br/>variants and codecs]
+  host -->|return| mp4[MP4 clip<br/>H.264 video and AAC audio]
+  film[Film Room page] -->|GET operations, 200| gql[Fastball GraphQL]
+  gql -.->|response body not captured| result[Search and topic result]
+  schedule[Schedule response] -->|return IDs| epg[Radio and TV EPG metadata]
+  epg -.->|resolver not observed| player[MLB Audio player]
+```
+
+The solid arrows show observed request and response paths. The dotted arrows mark unknown links or response bodies. The Stats API captures came from November 10, 2026. The sampled request does not identify a GUMBO region, Cloud SQL, or Bigtable. The clip host does not identify its storage origin. The EPG response did not show an audio resolver. For MLB's reported storage and regional cache architecture, see [the README diagrams](README.md). The 2025 article's CDN figure does not name a product. Do not assume that it is Google Media CDN.
 
 The article reports ballpark cache latency of 1–2 milliseconds and peak command volume near 11,000 per second. It reports a cross-region GUMBO availability target under two seconds. It also reports regular and heavy Valkey clusters in each region for read-through data. These are MLB's published figures. This investigation did not measure them.
 

@@ -11,188 +11,77 @@ The diagrams below combine dated MLB/Google Cloud reports with public observatio
 ### Capture, storage, and distribution
 
 ```mermaid
-flowchart LR
-  subgraph field[Ballpark edge path: 2025 report]
-    cameras[Tracking systems<br/>player movement data]
-    operators[Operator apps<br/>event metadata]
-    amq[AMQ message queue]
-    injection[Injection services]
-    edgevalkey[Valkey edge cache<br/>in Google Distributed Cloud]
-    cloudservices[Google Cloud services]
-    cameras -->|send tracking data| amq
-    operators -->|send metadata| amq
-    amq -->|send messages| injection
-    injection -->|read and write| edgevalkey
-    injection -->|write data| cloudservices
-  end
-
-  subgraph stores[Reported data stores]
-    game[Game records<br/>Cloud SQL for PostgreSQL<br/>2022 report]
-    pose[Player pose data<br/>Bigtable<br/>2022 report]
-    videoFeed[Camera video feeds]
-    clips[Clipped camera feeds<br/>Cloud Storage<br/>2020 report]
-    filmArchive[Film Room archive]
-    googleCloud[Google Cloud<br/>storage service not named]
-    flow[Nightly Dataflow job<br/>2022 report]
-    archive[Analytics copies<br/>Cloud Storage and BigQuery]
-    game -->|copy at night| flow
-    pose -->|copy at night| flow
-    flow -->|write copies| archive
-  end
-  videoFeed -->|2020 report: clip and save for search| clips
-  filmArchive -->|hosted in 2022 report| googleCloud
-
-  subgraph gumbo[Live GUMBO path: 2025 report figure]
-    ingest[Ballpark ingestion apps]
-    eastapps[GCP apps<br/>East region]
-    east[GUMBO cache<br/>Valkey; figure says Redis]
-    eventjob[opjob-event<br/>replication job]
-    central[GUMBO cache<br/>Valkey; figure says Redis]
-    centralapps[GCP apps<br/>Central region]
-    eastapi[Stats API<br/>East region]
-    centralapi[Stats API<br/>Central region]
-    cdn[CDN<br/>product not named]
-    users[Fans and internal users]
-    ingest -->|POST data| eastapps
-    eastapps -->|write| east
-    east -->|read| eastapps
-    east -->|send updates| eventjob
-    eventjob -->|replicate data| central
-    central -->|read| centralapps
-    centralapps -->|write| central
-    eastapps -->|provide game data| eastapi
-    centralapps -->|provide game data| centralapi
-    eastapi --> cdn
-    centralapi --> cdn
-    cdn -->|serve getLiveGumbo| users
-  end
-
-  subgraph readthrough[Other stats and roster data: 2025 report]
-    databases[Databases]
-    regular[Regular Valkey cluster]
-    heavy[Heavy Valkey cluster]
-    apps[MLB apps and scoreboards]
-    apps -->|request data| regular
-    apps -->|request data| heavy
-    regular -->|read through on cache miss| databases
-    heavy -->|read through on cache miss| databases
-    databases -->|populate cache| regular
-    databases -->|populate cache| heavy
-    regular -->|return data| apps
-    heavy -->|return data| apps
-  end
-
-  subgraph public[Public paths observed in this project]
-    stats[Stats API<br/>game and pitch data]
-    savant[Baseball Savant<br/>Statcast CSV]
-    csv[Pitch-level rows]
-    content[Game content and schedule<br/>metadata responses]
-    video[MP4 and HLS clip URLs]
-    epg[Broadcast and audio EPG<br/>metadata only]
-    audio[MLB Audio<br/>stream path unknown]
-    tv[MLB.TV Media Center]
-    stats --> content
-    content --> video
-    stats --> epg
-    savant -->|return| csv
-    epg -.->|playback route not observed| audio
-    tv -.->|stream request not observed| audio
-  end
-
-  subgraph planned[Google Cloud case study]
-    mediacdn[Media CDN]
-    live[Planned live game streaming]
-    mediacdn -->|deliver| live
-  end
+flowchart TB
+  tracking[Tracking data] -->|send| queue[AMQ queue]
+  operator[Operator metadata] -->|send| queue
+  queue -->|send| service[Injection services]
+  service -->|read and write| cache[Valkey cache<br/>Google Distributed Cloud]
+  service -->|write| cloud[Google Cloud services]
 ```
+
+MLB's 2025 article shows this ballpark path. It does not identify AMQ's implementation.
+
+### Reported storage and analytics paths
+
+```mermaid
+flowchart TB
+  game[Game records] -->|store| sql[Cloud SQL<br/>PostgreSQL]
+  pose[Player pose data] -->|store| bt[Bigtable]
+  sql -->|nightly copy| flow[Dataflow]
+  bt -->|nightly copy| flow
+  flow -->|write analytics| analytics[Cloud Storage<br/>analytics copy]
+  flow -->|write tables| bq[BigQuery]
+  bq -->|support analysis| clubs[Club analytics]
+  feeds[Camera video feeds] -->|clip and save for search| video[Cloud Storage<br/>video clips]
+  archive[Film Room archive] -->|hosted on| google[Google Cloud<br/>store not named]
+```
+
+MLB described these storage roles in 2020 and 2022. Its 2024 account says Statcast data reaches club BigQuery environments through APIs. The articles do not name retention rules, table layouts, or bucket paths. They do not say if video and analytics files use the same storage. [Sources 1–3](#sources)
 
 The 2025 article describes three Valkey uses. At the ballpark, an AMQ queue sends tracking data and operator metadata to injection services. Those services read and write a local Valkey cache. They also write data to Google Cloud services. For live games, GUMBO is a JSON record of game state. Regional apps read and write GUMBO caches. An `opjob-event` job replicates data from East to Central. A CDN serves `getLiveGumbo`; the article does not name the CDN product. For other data, regular and heavy Valkey clusters use read-through caching. MLB names stats, rosters, standings, and schedules as cached data. These links are from the article's [ballpark figure](https://storage.googleapis.com/gweb-cloudblog-publish/images/1_3QpqGX2.max-800x800.png) and [GUMBO figure](https://storage.googleapis.com/gweb-cloudblog-publish/images/2_QNOyrE2.max-1600x1600.png). The GUMBO figure labels its caches "redis gumbo"; the article text names Memorystore for Valkey. The source does not state if the CDN in the figure is Google Media CDN. The API and clip paths below are separate public observations. [Sources 1–6](#sources)
 
-### Storage and analytical copies
+### Live GUMBO and regional cache path
 
 ```mermaid
-flowchart TD
-  subgraph eventdata[Game and tracking data: 2022 report]
-    event[Game events and operator tags]
-    track[Player pose records]
-    event -->|store game data| sql[Cloud SQL<br/>PostgreSQL]
-    track -->|store pose data| bt[Bigtable]
-  end
-
-  subgraph batchcopy[Nightly copy: 2022 report]
-    flow[Dataflow job]
-    sql -->|read| flow
-    bt -->|read| flow
-    flow -->|write analytical files| gcs[Cloud Storage<br/>analytics copy]
-    flow -->|write tables| bq[BigQuery]
-    bq -->|support analysis| clubs[Club analytics]
-  end
-
-  subgraph videodata[Video clip storage: 2020 report]
-    feed[Camera video feeds]
-    cuts[Selected video clips]
-    videoStore[Cloud Storage<br/>video search data]
-    feed -->|create clips| cuts
-    cuts -->|save clips| videoStore
-  end
-
-  api[MLB APIs<br/>2024 report]
-  statcast[Statcast data]
-  teams[MLB teams and products]
-  statcast -->|send through API| api
-  api -->|provide data| teams
+flowchart TB
+  ingest[Ballpark ingestion apps] -->|POST data| eastapps[GCP apps<br/>East]
+  eastapps -->|write| eastcache[GUMBO cache<br/>East; Valkey]
+  eastcache -->|read| eastapps
+  eastcache -->|send updates| job[opjob-event]
+  job -->|replicate| centralcache[GUMBO cache<br/>Central; Valkey]
+  centralcache -->|read| centralapps[GCP apps<br/>Central]
+  centralapps -->|write| centralcache
+  eastapps --> eastapi[Stats API<br/>East]
+  centralapps --> centralapi[Stats API<br/>Central]
+  eastapi --> cdn[CDN<br/>product not named]
+  centralapi --> cdn
+  cdn -->|serve getLiveGumbo| users[Fans and internal users]
 ```
-
-The 2020 article says MLB saved clipped camera feeds in Cloud Storage for search. The 2022 article names Cloud SQL for game data and Bigtable for pose data. It also describes nightly Dataflow copies to Cloud Storage and BigQuery. These sources do not name retention rules, table layouts, or bucket paths. They do not say if video and analytical files use the same storage. MLB's 2024 account says Statcast data reaches club BigQuery environments through APIs. [Sources 1–3](#sources)
 
 ### Public services and what they expose
 
 ```mermaid
-flowchart LR
-  subgraph clients[Public client pages]
-    gd[Gameday]
-    bs[Baseball Savant]
-    film[Film Room]
-    tv[MLB.TV Media Center]
-  end
-
-  subgraph gameapi[Game and Statcast services]
-    stats[Stats API<br/>game and pitch data]
-    bdfed[BDFed<br/>game aggregation]
-    scout[Scout Insights<br/>tested routes need a token]
-    csv[Statcast CSV]
-    gd -->|request game data| stats
-    gd -->|request game feed| bdfed
-    gd -->|request protected insights| scout
-    bs -->|request pitch rows| csv
-  end
-
-  subgraph mediaapi[Video metadata services]
-    fastball[Fastball GraphQL<br/>Film Room queries]
-    content[Stats API game content<br/>editorial and clip metadata]
-    search[Search results and topics]
-    playback[MP4 and HLS clip URLs]
-    film -->|send GraphQL queries| fastball
-    fastball -.->|response body not captured| search
-    stats -->|return game content| content
-    content -->|include clip links| playback
-  end
-
-  subgraph audioapi[Broadcast and audio]
-    schedule[Stats API schedule<br/>broadcast and EPG metadata]
-    epg[Radio and TV feed IDs<br/>mediaId and contentId]
-    stream[Audio stream route<br/>not observed]
-    player[MLB Audio player<br/>subscriber feature]
-    stats -->|return schedule| schedule
-    schedule -->|include feed metadata| epg
-    epg -.->|resolver not found| stream
-    stream -.->|public path unknown| player
-  end
-
-  stats -.->|some tested analytics routes need a token| restricted[Restricted analytics data]
+flowchart TB
+  gameday[Gameday] -->|request game data| stats[Stats API]
+  gameday -->|request game feed| bdfed[BDFed]
+  gameday -->|request protected insights| scout[Scout Insights<br/>token required in tested request]
+  savant[Baseball Savant] -->|request pitch rows| csv[Statcast CSV]
 ```
 
-This diagram combines repository observations with dated reports. Gameday uses Stats API and BDFed services. Tested Scout routes required a bearer token. On November 10, 2026, the game-content response included clip URLs. The schedule response included radio and TV EPG IDs. MLB Help says MLB Audio is a subscriber feature. The IDs are metadata. They are not stream URLs. These observations do not show access to raw camera recordings, full broadcasts, or private databases. See the [evidence note](MLB_PUBLIC_DATA_EVIDENCE.md).
+Gameday uses Stats API and BDFed services. The tested Scout route required a bearer token. Baseball Savant returned pitch rows from its CSV route.
+
+```mermaid
+flowchart TB
+  film[Film Room] -->|send GraphQL queries| fastball[Fastball GraphQL]
+  fastball -.->|response body not captured| search[Search and topic results]
+  stats[Stats API game content] -->|return clip links| clips[MP4 and HLS URLs]
+  schedule[Stats API schedule] -->|return feed metadata| epg[Radio and TV EPG IDs]
+  epg -.->|resolver not found| stream[Audio stream route]
+  media[MLB.TV Media Center] -.->|stream request not observed| stream
+  stream -.->|public path unknown| player[MLB Audio player<br/>subscriber feature]
+```
+
+On November 10, 2026, game content returned clip URLs. The schedule returned radio and TV EPG IDs. The IDs are metadata, not stream URLs. MLB Help says MLB Audio is a subscriber feature. The captures do not show a path to raw camera recordings, full broadcasts, or private databases. See the [evidence note](MLB_PUBLIC_DATA_EVIDENCE.md).
 
 ## How to interpret the architecture
 
