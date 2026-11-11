@@ -286,7 +286,7 @@ endpoints:
     evidence: savant_route_inventory.yaml
     probe: illustrator
 infrastructure:
-  reference: README.md
+  reference: ../README.md
   note: Dated primary-source architecture; do not infer public database or bucket access.
 terms_of_use:
 - MLB/MLBAM copyright and terms apply; endpoint accessibility does not establish redistribution rights.

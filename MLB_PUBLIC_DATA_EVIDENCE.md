@@ -30,7 +30,7 @@ flowchart TB
   host -->|return| mp4[MP4 clip<br/>H.264 video and AAC audio]
   film[Film Room page] -->|GET operations, 200| gql[Fastball GraphQL]
   gql -.->|response body not captured| result[Search and topic result]
-  schedule[Schedule response] -->|return IDs| epg[Radio and TV EPG metadata]
+  schedule[Schedule response] -->|return IDs| epg[EPG IDs<br/>Electronic Program Guide<br/>mediaId and contentId<br/>metadata, not stream URLs]
   epg -.->|resolver not observed| player[MLB Audio player]
 ```
 
@@ -43,6 +43,12 @@ The article reports ballpark cache latency of 1–2 milliseconds and peak comman
 - REA CLI `rea-agents@6.5.0` ran bounded Playwright scenarios in Chromium 155.0.8059.84 for the Film Room page, one Stats API feed, and the MLB.TV Media Center. Network bodies were disabled in those captures; the returned capture files retain URLs, response statuses, resource types, and event completeness.
 - The current Film Room bundle and its referenced source map were fetched as raw artifacts. REA's JavaScript application analyzer parsed the 3.67 MB bundle. It recovered static route/query candidates but exhausted the worker heap during semantic analysis, so the graph is partial and was not treated as a complete client inventory. The source map was inspected for its embedded source list and content. The Media Center main bundle was also parsed as inert JavaScript; its graph was partial and exposed no verified endpoint inventory. Static Okta and GraphQL strings were treated as leads only; no live audio request was established.
 - `curl` saved bounded Stats API JSON, one Savant CSV query, and a single HLS master playlist with response headers. `jq` checked response shape and selected fields. FFprobe inspected one remote short clip; no full broadcast or bulk media was downloaded.
+
+## Film Room capture scope
+
+The REA Playwright scenario opened `https://www.mlb.com/video` and captured the page-load network activity. It did not start video playback. The complete capture contains 672 events. It recorded GET requests to `https://fastball-gateway.mlb.com/graphql` for `Search`, `getTopic`, `getContainers`, `getSuggestedSearches`, and `getUserInfo`; each recorded response returned HTTP 200. The capture contains no MP4 or HLS playback request. Network response bodies were disabled, so it did not capture the GraphQL result data. It did not watch a full game or a highlight clip.
+
+The capture could show which requests the landing page made and which client resources it loaded. It could not show the returned search results, the content of a clip, or what the MLB.TV player would stream after a user selected a game.
 
 ## Reproducible observations
 
@@ -87,9 +93,9 @@ The investigation did not exhaust the public source set. These records identify 
 
 | Source set | Remaining work |
 | --- | --- |
-| [Gameday inventory](gameday_route_inventory.yaml) | 24 client routes remain marked `source_discovered_not_probed`. Probe them one at a time and record each response. |
-| [Savant inventory](savant_route_inventory.yaml) | 108 source- or page-discovered rows mark a data operation as not probed. Check the route templates and parameters before probing. |
-| [Media operation inventory](mlb_media_operations.yaml) | 35 client-only GraphQL operations remain source-only. Four other operations have source documents or schema evidence, but no resolver call. |
+| [Gameday inventory](api-routes/gameday_route_inventory.yaml) | 24 client routes remain marked `source_discovered_not_probed`. Probe them one at a time and record each response. |
+| [Savant inventory](api-routes/savant_route_inventory.yaml) | 108 source- or page-discovered rows mark a data operation as not probed. Check the route templates and parameters before probing. |
+| [Media operation inventory](api-routes/mlb_media_operations.yaml) | 35 client-only GraphQL operations remain source-only. Four other operations have source documents or schema evidence, but no resolver call. |
 | Film Room client | The 3.67 MB bundle's REA semantic graph is partial because the worker reached its memory limit. A smaller, per-module or per-source-map analysis could recover more static links. |
 | MLB.TV Media Center | The anonymous browser capture ended with requests in flight. It did not exercise an authenticated playback session. Two downloaded client chunks (`media-player.js` and `media-routes.js`) have not had separate REA analysis. |
 | Stats API | The catalog includes published operations and secondary SDK leads. This evidence run directly checked only the live feed, game content, and one schedule hydration. It did not test every documented operation or parameter set. |

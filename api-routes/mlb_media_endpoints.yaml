@@ -119,4 +119,4 @@ expanded_reference:
   inventory: mlb_media_operations.yaml
   note: This hostname inventory records the initial discovery. The operation inventory contains subsequent concrete
     query tests and current results.
-  schema: mlb_fastball_schema.json
+  schema: ../schemas/fastball_graphql_schema.json

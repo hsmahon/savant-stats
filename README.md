@@ -2,7 +2,7 @@
 
 This repository maps public Baseball Savant, MLB Stats API, Gameday, and MLB video interfaces, and summarizes what first-party sources say about MLB's data systems.
 
-For endpoint inventories and schemas, start with [AGENTS.md](AGENTS.md). The catalogs distinguish documented endpoints, source-discovered routes, directly observed responses, and access that remains unknown. The [public data evidence note](MLB_PUBLIC_DATA_EVIDENCE.md) records a bounded REA/browser investigation and response hashes from November 10, 2026.
+For endpoint inventories, start with [AGENTS.md](AGENTS.md). The route catalogs and Stats API OpenAPI file are in [api-routes](api-routes/). Formal schemas and observed response views are in [schemas](schemas/README.md). The catalogs distinguish documented endpoints, source-discovered routes, directly observed responses, and access that remains unknown. The [public data evidence note](MLB_PUBLIC_DATA_EVIDENCE.md) records a bounded REA/browser investigation and response hashes from November 10, 2026.
 
 ## How MLB's data moves
 
@@ -12,14 +12,14 @@ The diagrams below combine dated MLB/Google Cloud reports with public observatio
 
 ```mermaid
 flowchart TB
-  tracking[Tracking data] -->|send| queue[AMQ queue]
+  tracking[Tracking data] -->|send| queue["AMQ queue<br/>Apache ActiveMQ or Amazon MQ?<br/>not verified"]
   operator[Operator metadata] -->|send| queue
   queue -->|send| service[Injection services]
   service -->|read and write| cache[Valkey cache<br/>Google Distributed Cloud]
   service -->|write| cloud[Google Cloud services]
 ```
 
-MLB's 2025 article shows this ballpark path. It does not identify AMQ's implementation.
+MLB's 2025 article labels the queue `AMQ`, but does not expand the name or identify the product. The diagram lists Apache ActiveMQ and Amazon MQ as possible meanings. Neither is verified.
 
 ### Reported storage and analytics paths
 
@@ -38,7 +38,7 @@ flowchart TB
 
 MLB described these storage roles in 2020 and 2022. Its 2024 account says Statcast data reaches club BigQuery environments through APIs. The articles do not name retention rules, table layouts, or bucket paths. They do not say if video and analytics files use the same storage. [Sources 1–3](#sources)
 
-The 2025 article describes three Valkey uses. At the ballpark, an AMQ queue sends tracking data and operator metadata to injection services. Those services read and write a local Valkey cache. They also write data to Google Cloud services. For live games, GUMBO is a JSON record of game state. Regional apps read and write GUMBO caches. An `opjob-event` job replicates data from East to Central. A CDN serves `getLiveGumbo`; the article does not name the CDN product. For other data, regular and heavy Valkey clusters use read-through caching. MLB names stats, rosters, standings, and schedules as cached data. These links are from the article's [ballpark figure](https://storage.googleapis.com/gweb-cloudblog-publish/images/1_3QpqGX2.max-800x800.png) and [GUMBO figure](https://storage.googleapis.com/gweb-cloudblog-publish/images/2_QNOyrE2.max-1600x1600.png). The GUMBO figure labels its caches "redis gumbo"; the article text names Memorystore for Valkey. The source does not state if the CDN in the figure is Google Media CDN. The API and clip paths below are separate public observations. [Sources 1–6](#sources)
+The 2025 article describes three Valkey uses. At the ballpark, an AMQ queue sends tracking data and operator metadata to injection services. Those services read and write a local Valkey cache. They also write data to Google Cloud services. For live games, GUMBO is a JSON record of game state. Regional apps read and write GUMBO caches. The figure shows East GUMBO data passing through a component labeled `opjob-event` before it reaches Central GUMBO. The article does not describe that component's implementation or trigger. A CDN serves `getLiveGumbo`; the article does not name the CDN product. For other data, regular and heavy Valkey clusters use read-through caching. MLB names stats, rosters, standings, and schedules as cached data. These links are from the article's [ballpark figure](https://storage.googleapis.com/gweb-cloudblog-publish/images/1_3QpqGX2.max-800x800.png) and [GUMBO figure](https://storage.googleapis.com/gweb-cloudblog-publish/images/2_QNOyrE2.max-1600x1600.png). The GUMBO figure labels its caches "redis gumbo"; the article text names Memorystore for Valkey. The source does not state if the CDN in the figure is Google Media CDN. The API and clip paths below are separate public observations. [Sources 1–6](#sources)
 
 ### Live GUMBO and regional cache path
 
@@ -75,13 +75,13 @@ flowchart TB
   film[Film Room] -->|send GraphQL queries| fastball[Fastball GraphQL]
   fastball -.->|response body not captured| search[Search and topic results]
   stats[Stats API game content] -->|return clip links| clips[MP4 and HLS URLs]
-  schedule[Stats API schedule] -->|return feed metadata| epg[Radio and TV EPG IDs]
+  schedule[Stats API schedule] -->|return feed metadata| epg[EPG IDs<br/>Electronic Program Guide<br/>mediaId and contentId<br/>metadata, not stream URLs]
   epg -.->|resolver not found| stream[Audio stream route]
   media[MLB.TV Media Center] -.->|stream request not observed| stream
   stream -.->|public path unknown| player[MLB Audio player<br/>subscriber feature]
 ```
 
-On November 10, 2026, game content returned clip URLs. The schedule returned radio and TV EPG IDs. The IDs are metadata, not stream URLs. MLB Help says MLB Audio is a subscriber feature. The captures do not show a path to raw camera recordings, full broadcasts, or private databases. See the [evidence note](MLB_PUBLIC_DATA_EVIDENCE.md).
+On November 10, 2026, game content returned clip URLs. The schedule returned radio and TV EPG IDs. EPG means electronic program guide. These IDs are metadata, not stream URLs. The Film Room page capture observed five GraphQL operations with HTTP 200 responses. It did not start video playback or capture an MP4/HLS request. MLB Help says MLB Audio is a subscriber feature. The captures do not show a path to raw camera recordings, full broadcasts, or private databases. See the [evidence note](MLB_PUBLIC_DATA_EVIDENCE.md).
 
 ## How to interpret the architecture
 
